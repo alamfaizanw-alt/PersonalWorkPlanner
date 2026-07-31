@@ -1,4 +1,4 @@
-const CACHE = "wfa-v16";
+const CACHE = "wfa-v17";
 const ASSETS = [
   "./",
   "./index.html",
@@ -23,16 +23,34 @@ self.addEventListener("activate", (e) => {
 
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
-  e.respondWith(
-    caches.match(e.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(e.request)
+  const req = e.request;
+  const isDoc = req.mode === "navigate" ||
+                (req.headers.get("accept") || "").includes("text/html");
+
+  if (isDoc) {
+    // Network-first for the page itself: always show the latest when online,
+    // fall back to the cached copy only when offline.
+    e.respondWith(
+      fetch(req)
         .then((resp) => {
           const copy = resp.clone();
-          caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
+          caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
           return resp;
         })
-        .catch(() => caches.match("./index.html"));
-    })
+        .catch(() => caches.match(req).then((r) => r || caches.match("./index.html")))
+    );
+    return;
+  }
+
+  // Cache-first for static assets (icons, manifest).
+  e.respondWith(
+    caches.match(req).then((cached) =>
+      cached ||
+      fetch(req).then((resp) => {
+        const copy = resp.clone();
+        caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
+        return resp;
+      }).catch(() => cached)
+    )
   );
 });
