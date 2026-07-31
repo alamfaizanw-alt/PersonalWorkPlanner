@@ -178,6 +178,35 @@
   .gsteps a{color:var(--gold);}
   .gsteps code{background:#0c0b09;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-family:Consolas,Menlo,monospace;font-size:.85em;color:var(--gold-bright);}
 
+  /* ---- Tips menu ---- */
+  .tips-body{display:flex;min-height:0;flex:1 1 auto;overflow:hidden;}
+  .tips-menu{
+    flex:0 0 210px;border-right:1px solid var(--line);padding:14px 12px;overflow-y:auto;
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .tip-item{
+    text-align:left;background:none;border:none;color:var(--cream-dim);font-family:inherit;font-size:.95rem;
+    padding:10px 12px;border-radius:9px;cursor:pointer;transition:all .16s ease;
+  }
+  .tip-item:hover{background:rgba(203,161,74,.06);color:var(--cream);}
+  .tip-item.active{background:rgba(203,161,74,.12);color:var(--gold);font-weight:600;box-shadow:inset 2px 0 0 var(--gold);}
+  .tips-content{flex:1 1 auto;padding:18px 24px 26px;overflow-y:auto;-webkit-overflow-scrolling:touch;color:var(--cream);line-height:1.6;}
+  .tips-content h3{margin:0 0 12px;color:var(--gold);font-size:1.35rem;}
+  .tips-content h4{margin:20px 0 8px;color:var(--gold-bright);font-size:1.02rem;}
+  .tips-content p{margin:0 0 12px;color:var(--cream-dim);}
+  .tips-content ul,.tips-content ol{margin:0 0 14px;padding-left:22px;color:var(--cream-dim);}
+  .tips-content li{margin:7px 0;}
+  .tips-content b{color:var(--cream);}
+  .tips-content em{color:var(--gold-soft);font-style:normal;}
+  .tips-content a{color:var(--gold);}
+  .tips-content code{background:#0c0b09;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-family:Consolas,Menlo,monospace;font-size:.85em;color:var(--gold-bright);word-break:break-all;}
+  @media(max-width:640px){
+    .tips-body{flex-direction:column;overflow:visible;}
+    .tips-menu{flex:0 0 auto;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;border-right:none;border-bottom:1px solid var(--line);padding:12px;gap:7px;}
+    .tip-item{flex:0 0 auto;white-space:nowrap;padding:7px 13px;border:1px solid var(--line);border-radius:999px;}
+    .tip-item.active{box-shadow:none;}
+  }
+
   /* ---- Assistant chat ---- */
   .chat-modes{display:flex;gap:8px;padding:14px 20px 0;}
   .chat-mode{
@@ -187,7 +216,7 @@
   .chat-mode.active{background:var(--metal);color:#241a06;border-color:var(--gold);font-weight:700;box-shadow:var(--edge);}
   .chat-keys{padding:14px 20px 0;}
   .chat-msgs{
-    padding:16px 20px;overflow-y:auto;flex:1 1 auto;min-height:200px;max-height:46vh;
+    padding:16px 20px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:200px;max-height:46vh;
     display:flex;flex-direction:column;gap:10px;
   }
   .msg{max-width:82%;padding:11px 14px;border-radius:14px;font-size:1rem;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;}
@@ -195,6 +224,11 @@
   .msg.me{align-self:flex-end;background:var(--metal);color:#241a06;border-bottom-right-radius:5px;box-shadow:var(--edge);}
   .msg.bot a{color:var(--gold);}
   .msg.typing{color:var(--cream-dim);font-style:italic;}
+  .typing-dots{display:flex;flex-direction:row;gap:5px;align-items:center;padding:15px 16px;}
+  .typing-dots .dot{width:7px;height:7px;border-radius:50%;background:var(--gold-soft);animation:typingdot 1.3s infinite ease-in-out;}
+  .typing-dots .dot:nth-child(2){animation-delay:.18s;}
+  .typing-dots .dot:nth-child(3){animation-delay:.36s;}
+  @keyframes typingdot{0%,65%,100%{opacity:.35;transform:translateY(0);}32%{opacity:1;transform:translateY(-3px);}}
   .chat-chips{display:flex;flex-wrap:wrap;gap:7px;padding:0 20px 6px;}
   .chat-chip{
     background:transparent;border:1px solid var(--line);color:var(--gold-soft);
@@ -393,6 +427,13 @@
   .modal-head h2{margin:0;color:var(--gold);font-size:1.6rem;letter-spacing:.2px;}
   .modal-head h2::before{content:"\25C6";color:var(--gold-soft);font-size:.62em;margin-right:10px;vertical-align:middle;}
   .modal-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 20px 0;}
+  .gantt-toggle{display:inline-flex;background:#0c0b09;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;}
+  .gtog{
+    background:none;border:none;color:var(--cream-dim);font-family:inherit;font-size:.85rem;
+    padding:6px 14px;border-radius:999px;cursor:pointer;transition:all .16s ease;
+  }
+  .gtog:hover{color:var(--cream);}
+  .gtog.active{background:var(--metal);color:#241a06;font-weight:700;box-shadow:var(--edge);}
   .modal-tools select{
     font-family:inherit;font-size:1rem;background:#0c0b09;color:var(--cream);
     border:1px solid var(--line);border-radius:8px;padding:8px 11px;color-scheme:dark;
@@ -561,7 +602,7 @@
     border-radius:99px;padding:4px 11px;font-size:.85rem;font-family:inherit;cursor:pointer;
   }
   .preset-chip:hover{border-color:var(--gold-soft);background:rgba(203,161,74,.08);}
-  .plan-controls input[type=time]{width:120px;}
+  .plan-controls input[type=time]{width:150px;}
   .plan-controls select{width:auto;min-width:220px;}
   .plan-hint{margin:12px 20px 0;padding:0;font-size:.9rem;color:var(--cream-dim);font-style:italic;line-height:1.45;}
 
@@ -639,6 +680,9 @@
       <h1>Work Flow Assist</h1>
     </div>
     <div class="header-right">
+      <button class="iconbtn-lg" id="tipsBtn" title="Tips & guide" aria-label="Tips and guide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.2a2.4 2.4 0 1 1 3.4 2.2c-.7.4-1 .8-1 1.6"/><path d="M12 16.5h.01"/></svg>
+      </button>
       <button class="iconbtn-lg" id="chatBtn" title="Assistant chat" aria-label="Assistant chat">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 20.5l1.4-4.2A8.3 8.3 0 0 1 3.5 11.5 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/></svg>
       </button>
@@ -721,7 +765,7 @@
     </div>
   </div>
 
-  <p class="hint">Tip: tap a task's checkbox to mark it complete. Edit or delete with the buttons on the right.</p>
+  <p class="hint" style="display:none;">Tip: tap a task's checkbox to mark it complete. Edit or delete with the buttons on the right.</p>
   </section>
   </div>
 
@@ -741,6 +785,10 @@
     <div class="modal-tools">
       <label for="ganttSelect" style="color:var(--cream-dim);font-size:.85rem;">Showing:</label>
       <select id="ganttSelect"></select>
+      <div class="gantt-toggle" role="group" aria-label="Filter by status">
+        <button class="gtog active" id="gtogAll" data-f="all">All</button>
+        <button class="gtog" id="gtogTodo" data-f="todo">To&#8209;do</button>
+      </div>
     </div>
     <div class="gantt-scroll">
       <div class="gantt" id="ganttBody"></div>
@@ -773,7 +821,7 @@
       </div>
       <button class="btn" id="planBtn">Plan my day</button>
     </div>
-    <p class="plan-hint">Builds a time-boxed schedule below — your unfinished tasks, ranked by importance and deadline, fitted around the fixed blocks you add. Needs at least one task that can start today.</p>
+    <p class="plan-hint" style="display:none;">Builds a time-boxed schedule below — your unfinished tasks, ranked by importance and deadline, fitted around the fixed blocks you add. Needs at least one task that can start today.</p>
 
     <div class="commit-area">
       <div class="commit-head">Fixed blocks in your day <span>— work, class, gym, kids, meals, anything. Tasks get scheduled around these.</span></div>
@@ -863,6 +911,20 @@
   </div>
 </div>
 
+<!-- Tips pop-up (grouped mini-menu) -->
+<div class="overlay" id="tipsOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Tips</h2>
+      <button class="closex" id="closeTips" aria-label="Close">&times;</button>
+    </div>
+    <div class="tips-body">
+      <nav class="tips-menu" id="tipsMenu"></nav>
+      <div class="tips-content" id="tipsContent"></div>
+    </div>
+  </div>
+</div>
+
 <!-- Assistant chat pop-up (local guide + optional AI copilot) -->
 <div class="overlay" id="chatOverlay">
   <div class="modal">
@@ -914,6 +976,7 @@
           <input id="gClientId" type="text" placeholder="1234567890-abcd....apps.googleusercontent.com" autocomplete="off">
         </div>
         <button class="btn" id="gConnectBtn">Connect Google</button>
+        <p class="est-intro" style="margin:14px 0 0;">Stuck? The full step-by-step (including running a local server and every OAuth setting) lives in <b>Tips → Google sync &amp; hosting</b>.</p>
       </div>
       <div id="gConnected" style="display:none;">
         <div class="est-card">
@@ -1293,6 +1356,7 @@ function closeAllOverlays(){
   document.getElementById("estOverlay").classList.remove("open");
   var g=document.getElementById("gOverlay"); if(g) g.classList.remove("open");
   var c=document.getElementById("chatOverlay"); if(c) c.classList.remove("open");
+  var tp=document.getElementById("tipsOverlay"); if(tp) tp.classList.remove("open");
 }
 function openGantt(){
   closeAllOverlays();
@@ -1311,6 +1375,13 @@ function openGantt(){
 }
 function closeGantt(){ document.getElementById("overlay").classList.remove("open"); }
 
+let ganttFilter="all";
+function setGanttFilter(f){
+  ganttFilter=f;
+  document.getElementById("gtogAll").classList.toggle("active",f==="all");
+  document.getElementById("gtogTodo").classList.toggle("active",f==="todo");
+  drawGantt();
+}
 function drawGantt(){
   const body=document.getElementById("ganttBody");
   const which=document.getElementById("ganttSelect").value;
@@ -1321,11 +1392,15 @@ function drawGantt(){
     const p=state.projects.find(x=>x.id===which);
     if(p) p.tasks.forEach(t=>rows.push({...t,_p:p.name}));
   }
+  if(ganttFilter==="todo") rows=rows.filter(t=>!t.done);
   const dated=rows.filter(t=>parseD(t.start)||parseD(t.end));
   const undated=rows.length-dated.length;
 
   if(!dated.length){
-    body.innerHTML=`<div class="gantt-empty">No tasks with dates yet.<br>Add start/end dates to a task and it will appear on the timeline.</div>`;
+    const msg = ganttFilter==="todo"
+      ? "Nothing outstanding with dates.<br>Everything with a timeline is done — switch to \"All\" to see finished work."
+      : "No tasks with dates yet.<br>Add start/end dates to a task and it will appear on the timeline.";
+    body.innerHTML=`<div class="gantt-empty">${msg}</div>`;
     return;
   }
   // range
@@ -1342,13 +1417,13 @@ function drawGantt(){
   const totalDays=span;
 
   let html="";
-  // axis ticks
-  const tickCount=Math.min(8,totalDays);
+  // axis ticks — one per day, stepped for long ranges, so dates never duplicate
+  const step=Math.max(1, Math.ceil(totalDays/10));
   let ticks="";
-  for(let i=0;i<=tickCount;i++){
-    const frac=tickCount? i/tickCount:0;
-    const d=new Date(+start + Math.round(frac*(totalDays-1))*86400000);
-    ticks+=`<span class="axis-tick" style="left:${(frac*100).toFixed(2)}%">${fmtShort(d)}</span>`;
+  for(let off=0; off<totalDays; off+=step){
+    const d=new Date(+start + off*86400000);
+    const left=(off/totalDays*100);
+    ticks+=`<span class="axis-tick" style="left:${left.toFixed(2)}%">${fmtShort(d)}</span>`;
   }
   html+=`<div class="gantt-axis">${ticks}</div>`;
 
@@ -1519,16 +1594,24 @@ function buildSegments(tasks,freeH,style){
   return {segs,alloc};
 }
 function placeSegments(gaps,segs){
+  const CHUNK=1.5, BRK=0.25, EPS=0.001; // ≤90 min of work, then a 15-min break
   const items=[], seen={};
-  let gi=0, gcur=gaps.length?gaps[0].s:0, si=0, rem=segs.length?segs[0].hours:0;
-  while(si<segs.length && gi<gaps.length){
-    const g=gaps[gi];
-    if(gcur>=g.e-0.001){ gi++; if(gi<gaps.length) gcur=gaps[gi].s; continue; }
-    const take=Math.min(rem,g.e-gcur);
-    const id=segs[si].task.id;
-    items.push({s:gcur,e:gcur+take,task:segs[si].task,cont:!!seen[id]});
-    seen[id]=true; gcur+=take; rem-=take;
-    if(rem<=0.001){ si++; if(si<segs.length) rem=segs[si].hours; }
+  let si=0, rem=segs.length?segs[0].hours:0;
+  for(let gi=0; gi<gaps.length && si<segs.length; gi++){
+    let c=gaps[gi].s; const end=gaps[gi].e;
+    while(si<segs.length && c < end-EPS){
+      const run=Math.min(CHUNK, rem, end-c);
+      if(run<=EPS) break;
+      const id=segs[si].task.id;
+      items.push({type:"task", s:c, e:c+run, task:segs[si].task, cont:!!seen[id]});
+      seen[id]=true; c+=run; rem-=run;
+      if(rem<=EPS){ si++; if(si<segs.length) rem=segs[si].hours; }
+      // breather between work chunks — only if more work is coming and there's room
+      if(si<segs.length && (end-c) > BRK+0.1){
+        items.push({type:"break", s:c, e:c+BRK});
+        c+=BRK;
+      }
+    }
   }
   return items;
 }
@@ -1582,10 +1665,14 @@ function planDay(){
 
   const timeline=[];
   mc.forEach(c=>timeline.push({type:"commit",s:c.s,e:c.e,label:c.label}));
-  placed.forEach(p=>timeline.push({type:"task",s:p.s,e:p.e,task:p.task,cont:p.cont}));
+  placed.forEach(p=>{
+    if(p.type==="break") timeline.push({type:"break",s:p.s,e:p.e});
+    else timeline.push({type:"task",s:p.s,e:p.e,task:p.task,cont:p.cont});
+  });
   timeline.sort((a,b)=> a.s-b.s || (a.type==="commit"?-1:1));
 
-  const firstTask=placed.length? placed[0].task : available[0];
+  const firstTaskItem=placed.find(p=>p.type==="task");
+  const firstTask=firstTaskItem? firstTaskItem.task : available[0];
   const fp=firstTask._pri;
   let why;
   if(fp.pinned) why="you pinned it as a must-do";
@@ -1603,6 +1690,8 @@ function planDay(){
   timeline.forEach(item=>{
     if(item.type==="commit"){
       html+=`<div class="block commit"><span class="time">${fmtTime(item.s)} – ${fmtTime(item.e)}</span><span class="what"><span class="nm">${esc(item.label)}</span></span><span class="hrs">${dur2(item.e-item.s)}</span></div>`;
+    }else if(item.type==="break"){
+      html+=`<div class="block brk"><span class="time">${fmtTime(item.s)} – ${fmtTime(item.e)}</span><span class="what"><span class="nm">Break</span></span><span class="hrs">${dur2(item.e-item.s)}</span></div>`;
     }else{
       const t=item.task, pr=t._pri;
       const pinChip=pr.pinned?` <span class="pbadge p-pin">Pinned</span>`:"";
@@ -1838,6 +1927,117 @@ function gDisconnect(){
 }
 
 
+/* ---------- Tips: grouped mini-menu ---------- */
+const TIPS=[
+  {id:"start",label:"Getting started",html:`
+    <h3>Welcome — here's the lay of the land</h3>
+    <p>Work Flow Assist is a planner that actually thinks about what matters, instead of a to-do list that just stares back at you. The 30-second tour:</p>
+    <ol>
+      <li><b>Add a task.</b> Bottom of the Tasks card — name it, give it a due date, say how important it is, and take a guess at the hours. Blank on those last two? Hit <em>"Not sure? Help me estimate"</em> and answer a few questions.</li>
+      <li><b>Mark it important (or not).</b> The app ranks by importance <em>and</em> deadline, so a big-deal task with a comfy deadline won't get buried under trivial stuff due tomorrow.</li>
+      <li><b>Plan your day.</b> Tap <em>Plan My Day</em>, tell it your hours and any fixed blocks (gym, class, lunch), and it lays out a schedule — breaks included, because you're a human.</li>
+      <li><b>Check things off.</b> Tap the checkbox. Watch the ring fill. Feel unreasonably good about it.</li>
+    </ol>
+    <p>That's genuinely it. Poke around — nothing in here bites.</p>`},
+  {id:"plan",label:"Planning your day",html:`
+    <h3>Planning your day</h3>
+    <p>Open <b>Plan My Day</b> and it builds a real, timed schedule out of your open tasks.</p>
+    <ul>
+      <li><b>Day starts / ends</b> — your working window. The whole plan lives inside it.</li>
+      <li><b>Focus vs Spread</b> — same tasks, different strategy. <b>Focus</b> goes deep on your top priorities one at a time. <b>Spread</b> rotates through several so nothing gets ignored. Either way you get <b>breaks</b> built in — a breather roughly every 90 minutes.</li>
+      <li><b>Fixed blocks</b> — add anything locked into your day (work shift, class, gym, picking up kids, lunch). Your tasks schedule <em>around</em> them, and a long task will happily pause and continue after.</li>
+    </ul>
+    <p>Tasks that can't start yet (a future start date) sit out until their day arrives — the plan tells you when.</p>`},
+  {id:"priority",label:"Priorities & estimating",html:`
+    <h3>Priorities &amp; estimating</h3>
+    <p>The whole point is helping you figure out what's <em>actually</em> important.</p>
+    <ul>
+      <li><b>Importance</b> — Low to Critical. High and Critical tasks wear little gold stars so they stand out.</li>
+      <li><b>The ranking</b> — importance × urgency. Overdue and due-soon get loud badges; the rest sorts sensibly underneath.</li>
+      <li><b>Pin it</b> — a genuine "must-do today"? Hit <b>Pin</b> and it jumps to the front of the plan, no arguments.</li>
+      <li><b>"Help me estimate"</b> — truly unsure how big or important something is? It asks a handful of quick questions and hands back a sensible importance + hours guess. No more staring at a blank hours field.</li>
+    </ul>`},
+  {id:"gantt",label:"Projects vs tasks & Gantt",html:`
+    <h3>Projects vs. just tasks</h3>
+    <p>Short answer: if you're not sure, <b>don't bother with projects</b> — one project and a flat task list is perfectly fine, and honestly how most people should start.</p>
+    <p>Reach for <b>multiple projects</b> when you've got clearly separate buckets of work that you'd rather not see mixed together — say <em>Work</em>, <em>Home reno</em>, and <em>Side hustle</em>. Each project keeps its own task list and its own Gantt chart, so you can focus on one area without the others cluttering the view.</p>
+    <p>Here's the key thing though: <b>Plan My Day doesn't care about project boundaries.</b> It pulls open tasks from <em>all</em> your projects and schedules your actual day across them — because your afternoon doesn't split neatly into "work hours" and "home hours." So projects are just for organizing and reviewing; your daily plan always sees the whole picture.</p>
+    <p>Rule of thumb: use tasks for the <em>what</em>, use projects only when you need the <em>where it belongs</em>. Don't create a project for every little thing — that's just more tabs to click.</p>
+    <h4>Projects, mechanically</h4>
+    <ul>
+      <li>The tabs up top: <b>switch</b>, <b>+ New project</b>, or <b>Rename</b>.</li>
+      <li>Deleting a project takes its tasks with it (it'll ask first).</li>
+    </ul>
+    <h4>The Gantt chart</h4>
+    <ul>
+      <li><b>View Gantt Chart</b> draws every task as a bar from its start to end date.</li>
+      <li>Use the dropdown to see <b>one project</b> or <b>all projects combined</b> — the combined view lines everything up on one shared timeline so you can spot clashes across your whole life at once.</li>
+    </ul>`},
+  {id:"data",label:"Saving, offline & privacy",html:`
+    <h3>Saving, offline &amp; your privacy</h3>
+    <ul>
+      <li><b>Saving</b> — automatic. Every change is stored in your browser the instant you make it. No save button to forget.</li>
+      <li><b>Offline</b> — works with no internet once it's loaded. Install it / add it to your home screen and it opens like a real app.</li>
+      <li><b>Privacy</b> — your data lives on <em>your</em> device. Nothing leaves it unless you turn on Google sync or ask the AI Copilot something — and only those two ever phone home.</li>
+      <li><b>Heads up</b> — it's per-device. Clearing your browser data wipes it, and your phone and laptop keep separate lists unless you connect Google.</li>
+    </ul>`},
+  {id:"google",label:"Google sync & hosting",html:`
+    <h3>Getting it online + Google sync</h3>
+    <p>Two things need a real web address (not a file on your desktop): installing it properly, and Google sync. Here's the whole thing, start to finish.</p>
+    <h4>Option A — Host on GitHub Pages (free, permanent)</h4>
+    <ol>
+      <li>Make a new GitHub repo (Public), e.g. <code>work-flow-assist</code>.</li>
+      <li>Upload all five files to the repo <b>root</b>: <code>index.html</code>, <code>sw.js</code>, <code>manifest.webmanifest</code>, <code>icon-192.png</code>, <code>icon-512.png</code>.</li>
+      <li><b>Settings → Pages → Deploy from a branch → main → / (root) → Save.</b></li>
+      <li>Give it a minute — you're live at <code>https://YOUR-NAME.github.io/work-flow-assist/</code>.</li>
+    </ol>
+    <h4>Option B — Run it locally (quick testing)</h4>
+    <p>Double-clicking the file (<code>file://…</code>) is fine for <em>using</em> the app, but Google sign-in refuses to run from a file. So start a tiny local server:</p>
+    <ol>
+      <li>Open a terminal in the folder that has <code>index.html</code>.</li>
+      <li>Run whichever you have: <code>python3 -m http.server 8000</code> &nbsp;or&nbsp; <code>npx serve -l 8000</code>.</li>
+      <li>Visit <code>http://localhost:8000</code>.</li>
+    </ol>
+    <h4>Connecting Google Tasks (the OAuth bit)</h4>
+    <p>One-time setup in your own Google account. It lets tasks sync to Google Tasks (which also appear in Google Calendar's Tasks panel).</p>
+    <ol>
+      <li>Go to the <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">Google Cloud Console</a> and <b>create a project</b> (top bar → New Project).</li>
+      <li><b>APIs &amp; Services → Library</b> → search <b>Google Tasks API</b> → <b>Enable</b>.</li>
+      <li><b>APIs &amp; Services → OAuth consent screen</b> → <b>External</b> → add an app name and your email → under <b>Test users</b>, add your own Google address. (This is what lets you skip Google's formal verification for personal use.)</li>
+      <li><b>Credentials → Create credentials → OAuth client ID</b> → Application type <b>Web application</b>.</li>
+      <li>Under <b>Authorized JavaScript origins</b>, add the exact address you'll open the app from — <em>no trailing slash</em>:
+        <ul><li><code>https://YOUR-NAME.github.io</code> (GitHub Pages)</li><li><code>http://localhost:8000</code> (local testing)</li></ul></li>
+      <li>Create it, then <b>copy the Client ID</b> (it ends in <code>.apps.googleusercontent.com</code>).</li>
+      <li>In the app, tap the <b>cloud button</b> → paste the Client ID → <b>Connect Google</b>. The first time, Google shows an "this app isn't verified" screen — expected, since you're the test user. Click <b>Advanced → Go to (your app)</b> and allow.</li>
+      <li>Hit <b>Sync now</b>. Tasks flow into a dedicated <b>Work Flow Assist</b> list, leaving your other Google stuff alone.</li>
+    </ol>
+    <p><b>If it won't connect:</b> the origin must match <em>exactly</em> — <code>http</code> vs <code>https</code>, the right port, and no trailing slash. An "origin mismatch" error is almost always this. And sync needs internet; the rest of the app doesn't.</p>`},
+  {id:"ai",label:"AI Copilot",html:`
+    <h3>The AI Copilot</h3>
+    <p>The chat has two tabs. <b>Guide</b> (free, offline, zero setup) answers "how do I…" questions about the app. <b>AI Copilot</b> is a real language model that looks at your actual tasks and helps you think — "what should I tackle first?", "reorganize my week", "why is that first?".</p>
+    <ul>
+      <li>It needs internet and your own <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Anthropic API key</a> (paste it into the Copilot tab — it's stored only on your device).</li>
+      <li>Each message costs a small amount against your key. It defaults to the cheap, fast model.</li>
+      <li>Using it sends your task list to Anthropic to answer. The Guide sends nothing anywhere.</li>
+    </ul>`}
+];
+let tipsActive="start";
+function openTips(){ closeAllOverlays(); renderTips(); document.getElementById("tipsOverlay").classList.add("open"); }
+function closeTips(){ document.getElementById("tipsOverlay").classList.remove("open"); }
+function renderTips(){
+  const menu=document.getElementById("tipsMenu");
+  menu.innerHTML="";
+  TIPS.forEach(t=>{
+    const b=document.createElement("button");
+    b.className="tip-item"+(t.id===tipsActive?" active":"");
+    b.textContent=t.label;
+    b.onclick=()=>{ tipsActive=t.id; renderTips(); document.getElementById("tipsContent").scrollTop=0; };
+    menu.appendChild(b);
+  });
+  const active=TIPS.find(t=>t.id===tipsActive)||TIPS[0];
+  document.getElementById("tipsContent").innerHTML=active.html;
+}
+
 /* ---------- Assistant chat: local guide + BYOK copilot ---------- */
 let chatMode="guide", chatGreeted=false;
 let chatHistory=[]; // for copilot multi-turn
@@ -1852,7 +2052,7 @@ const GUIDE_KB=[
   {k:["focus","spread","difference","vs"],a:"Focus concentrates your available hours on the highest-priority tasks one at a time (good for deep work). Spread caps each task at about 1.5 hours and rotates through several, so you make progress on many. Pick whichever fits the day."},
   {k:["fixed","block","blocks","commitment","gym","class","work","kids","meal","break","lunch"],a:"In Plan My Day, add fixed blocks — work shift, class, gym, picking up kids, meals, anything locked into your day. Tasks get scheduled into the gaps around them, and a task will even split to continue after a block. Quick-add chips make common ones fast."},
   {k:["gantt","chart","timeline","bars"],a:"View Gantt Chart opens a pop-up timeline showing each task as a bar from its start to end date. Use the dropdown to see one project's chart or all projects combined."},
-  {k:["project","projects","rename","switch"],a:"Use the project tabs near the top to switch projects, '+ New project' to add one, and Rename to rename the current one. Each project has its own tasks and Gantt, and Plan My Day pulls from all of them."},
+  {k:["project","projects","rename","switch","multiple","separate","organize","buckets"],a:"Projects are optional — one project with a flat task list is fine to start. Add multiple projects only when you have clearly separate buckets of work (Work, Home, Side project) you'd rather not mix. Each keeps its own tasks and Gantt, but Plan My Day still pulls from all of them, since your real day spans everything. Use the tabs up top to switch, add, or rename. See Tips → Projects vs tasks for the full rundown."},
   {k:["progress","ring","percent","tiles","done","complete"],a:"The ring at the top shows what percent of the current project's tasks are complete, with tiles for total, done, and overdue counts. Tap a task's checkbox to mark it complete."},
   {k:["offline","save","saved","data","stored","storage","private","privacy"],a:"Everything saves automatically in your browser on this device — no account, no server. It works fully offline. Your data stays on your device unless you turn on Google sync or use the AI Copilot (both send data out only when you choose to use them)."},
   {k:["google","calendar","tasks","sync","connect"],a:"The cloud button in the header connects Google Tasks (which also show in Google Calendar's Tasks panel). After a one-time Google Cloud setup and pasting your Client ID, Sync now pushes tasks to a dedicated 'Work Flow Assist' list; completing or deleting on either side syncs. It needs internet."},
@@ -1953,27 +2153,38 @@ async function aiCall(){
   const text=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n").trim();
   return text||"(the model returned no text)";
 }
+function typingBubble(){
+  const box=document.getElementById("chatMsgs");
+  const d=document.createElement("div");
+  d.className="msg bot typing-dots";
+  d.innerHTML='<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+  return d;
+}
 function sendChat(){
   const input=document.getElementById("chatInput");
   const q=input.value.trim(); if(!q) return;
   addMsg("me",q); input.value="";
   if(chatMode==="guide"){
-    addMsg("bot",guideAnswer(q));
+    const ans=guideAnswer(q);
+    const t=typingBubble();
+    const wait=800+Math.min(1400,ans.length*7); // a beat, a touch longer for longer answers
+    setTimeout(()=>{ t.remove(); addMsg("bot",ans); },wait);
     return;
   }
   // copilot
   if(!state.ai.key){ addMsg("bot","Add your Anthropic API key above to use the copilot — the Guide tab works without one."); setChatMode("copilot"); return; }
   chatHistory.push({role:"user",content:q});
-  const typing=addMsg("bot","thinking…",true);
+  const t=typingBubble();
   aiCall().then(ans=>{
-    typing.remove(); addMsg("bot",ans); chatHistory.push({role:"assistant",content:ans});
+    t.remove(); addMsg("bot",ans); chatHistory.push({role:"assistant",content:ans});
   }).catch(e=>{
-    typing.remove();
+    t.remove();
     let m="Couldn't reach the model: "+(e.message||e);
     if(e.status===401) m="That API key was rejected — double-check it in the copilot setup.";
     if(e.status===429) m="Rate limited or out of credit on your API key — try again shortly.";
     addMsg("bot",m);
-    chatHistory.pop(); // drop the unanswered user turn
+    chatHistory.pop();
   });
 }
 
@@ -1989,6 +2200,8 @@ document.getElementById("openGantt").onclick=openGantt;
 document.getElementById("closeGantt").onclick=closeGantt;
 document.getElementById("overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeGantt(); });
 document.getElementById("ganttSelect").onchange=drawGantt;
+document.getElementById("gtogAll").onclick=()=>setGanttFilter("all");
+document.getElementById("gtogTodo").onclick=()=>setGanttFilter("todo");
 document.getElementById("openAsst").onclick=openAsst;
 document.getElementById("closeAsst").onclick=closeAsst;
 document.getElementById("asstOverlay").addEventListener("click",e=>{ if(e.target.id==="asstOverlay") closeAsst(); });
@@ -2003,7 +2216,12 @@ document.getElementById("estBtn").onclick=openEst;
 document.getElementById("closeEst").onclick=closeEst;
 document.getElementById("estOverlay").addEventListener("click",e=>{ if(e.target.id==="estOverlay") closeEst(); });
 document.getElementById("estCalc").onclick=runEstimate;
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeGantt(); closeAsst(); closeEst(); closeGoogle(); closeChat(); } });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeGantt(); closeAsst(); closeEst(); closeGoogle(); closeChat(); closeTips(); } });
+
+/* Tips wiring */
+document.getElementById("tipsBtn").onclick=openTips;
+document.getElementById("closeTips").onclick=closeTips;
+document.getElementById("tipsOverlay").addEventListener("click",e=>{ if(e.target.id==="tipsOverlay") closeTips(); });
 
 /* Assistant chat wiring */
 document.getElementById("chatBtn").onclick=openChat;

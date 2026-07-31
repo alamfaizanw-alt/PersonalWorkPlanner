@@ -1,4 +1,4 @@
-const CACHE = "wfa-v10";
+const CACHE = "wfa-v14";
 const ASSETS = [
   "./",
   "./index.html",
