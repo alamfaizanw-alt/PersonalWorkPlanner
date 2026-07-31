@@ -159,6 +159,9 @@
   .login-field input:focus{outline:none;border-color:var(--gold-soft);box-shadow:0 0 0 3px rgba(203,161,74,.18);}
   .login-btn{width:100%;margin-top:8px;padding:13px;font-size:1.02rem;}
   .login-note{font-size:.78rem;color:var(--cream-dim);margin:18px 0 0;line-height:1.55;}
+  .login-note:empty{display:none;}
+  .login-credit{font-size:.78rem;color:var(--cream-dim);margin:20px 0 0;letter-spacing:.02em;}
+  .login-credit b{color:var(--gold);font-weight:600;}
   @media(max-width:560px){ .brand h1{font-size:1.3rem;} .mark{width:38px;height:38px;} .mark svg{width:22px;height:22px;} header.app{padding:10px 18px;margin:0 -18px 18px;} }
 
   button{font-family:inherit;cursor:pointer;}
@@ -178,7 +181,20 @@
   .gsteps a{color:var(--gold);}
   .gsteps code{background:#0c0b09;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-family:Consolas,Menlo,monospace;font-size:.85em;color:var(--gold-bright);}
 
-  /* ---- Tips menu ---- */
+  /* ---- Tile detail list ---- */
+  .tl-intro{color:var(--cream-dim);font-style:italic;margin:0 0 16px;line-height:1.5;}
+  .tl-group{font-size:.8rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin:16px 0 8px;}
+  .tl-row{
+    display:flex;align-items:center;gap:12px;padding:11px 13px;margin-bottom:8px;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);
+    border-radius:var(--radius-sm);box-shadow:var(--edge);
+  }
+  .tl-row.tl-done{opacity:.6;}
+  .tl-row .tl-name{flex:1 1 auto;min-width:0;color:var(--cream);}
+  .tl-row.tl-done .tl-name{text-decoration:line-through;color:var(--done);}
+  .tl-row .tl-meta{flex:0 0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+  .tl-row .tl-date{font-size:.82rem;color:var(--cream-dim);font-style:italic;font-variant-numeric:tabular-nums;}
+  .tl-empty{color:var(--cream-dim);font-style:italic;text-align:center;padding:26px 4px;}
   .tips-body{display:flex;min-height:0;flex:1 1 auto;overflow:hidden;}
   .tips-menu{
     flex:0 0 210px;border-right:1px solid var(--line);padding:14px 12px;overflow-y:auto;
@@ -299,7 +315,10 @@
   .tile{
     flex:1 1 78px;min-width:70px;background:linear-gradient(180deg,rgba(255,255,255,.02),transparent);
     border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;box-shadow:var(--edge);
+    font-family:inherit;text-align:left;cursor:pointer;transition:border-color .16s ease,transform .12s ease,background .16s ease;
   }
+  .tile:hover{border-color:var(--gold-soft);transform:translateY(-1px);background:linear-gradient(180deg,rgba(203,161,74,.08),transparent);}
+  .dashboard>.progress-card .stat-tiles .tile{text-align:center;}
   .tile .tval{display:block;font-size:1.55rem;font-weight:700;color:var(--gold);line-height:1;font-variant-numeric:tabular-nums;}
   .tile .tlbl{display:block;margin-top:5px;font-size:.68rem;color:var(--cream-dim);text-transform:uppercase;letter-spacing:.14em;}
   .tile.tile-warn{border-color:rgba(181,86,47,.5);}
@@ -718,9 +737,9 @@
       <span class="today-line" id="todayLine"></span>
       <span class="pname" id="progName">—</span>
       <div class="stat-tiles">
-        <div class="tile"><span class="tval" id="tTotal">0</span><span class="tlbl">Tasks</span></div>
-        <div class="tile"><span class="tval" id="tDone">0</span><span class="tlbl">Done</span></div>
-        <div class="tile" id="tileOver"><span class="tval" id="tOver">0</span><span class="tlbl">Overdue</span></div>
+        <button class="tile" id="tileAll" data-f="all"><span class="tval" id="tTotal">0</span><span class="tlbl">Tasks</span></button>
+        <button class="tile" id="tileDone" data-f="done"><span class="tval" id="tDone">0</span><span class="tlbl">Done</span></button>
+        <button class="tile" id="tileOver" data-f="overdue"><span class="tval" id="tOver">0</span><span class="tlbl">Overdue</span></button>
       </div>
       <div class="progress-sub" id="progSub">No tasks yet.</div>
     </div>
@@ -773,6 +792,17 @@
     <span class="by">Designed by <b>Faizan Alam</b></span>
     <span class="cr">&copy; <span id="footYear">2026</span></span>
   </footer>
+</div>
+
+<!-- Tile detail: quick reminder of items -->
+<div class="overlay" id="tileOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="tileTitle">Tasks</h2>
+      <button class="closex" id="closeTile" aria-label="Close">&times;</button>
+    </div>
+    <div class="asst-body" id="tileBody"></div>
+  </div>
 </div>
 
 <!-- Gantt pop-up -->
@@ -1042,11 +1072,12 @@
       <input id="loginName" type="text" placeholder="Your name" autocomplete="name">
     </div>
     <div class="login-field" id="loginPinWrap">
-      <label for="loginPin">PIN <span style="text-transform:none;letter-spacing:0;color:var(--cream-dim);">(optional — locks this device)</span></label>
+      <label for="loginPin">PIN <span style="text-transform:none;letter-spacing:0;color:var(--cream-dim);">(optional — local lock)</span></label>
       <input id="loginPin" type="password" inputmode="numeric" placeholder="Add a PIN" autocomplete="off">
     </div>
     <button class="btn login-btn" id="loginBtn">Get started</button>
-    <p class="login-note" id="loginNote">Your profile stays on this device — there's no account or server. You can connect Google Calendar once you're in.</p>
+    <p class="login-note" id="loginNote"></p>
+    <p class="login-credit">Designed by <b>Faizan Alam</b> &nbsp;&#8226;&nbsp; &copy; <span id="loginYear">2026</span></p>
   </div>
 </div>
 
@@ -1357,6 +1388,7 @@ function closeAllOverlays(){
   var g=document.getElementById("gOverlay"); if(g) g.classList.remove("open");
   var c=document.getElementById("chatOverlay"); if(c) c.classList.remove("open");
   var tp=document.getElementById("tipsOverlay"); if(tp) tp.classList.remove("open");
+  var tl=document.getElementById("tileOverlay"); if(tl) tl.classList.remove("open");
 }
 function openGantt(){
   closeAllOverlays();
@@ -1927,6 +1959,52 @@ function gDisconnect(){
 }
 
 
+/* ---------- Tile detail: quick reminder of items ---------- */
+function openTile(filter){
+  closeAllOverlays();
+  const p=current();
+  const today=todayMid();
+  let tasks=p.tasks.slice(), title, intro;
+  if(filter==="done"){
+    tasks=tasks.filter(t=>t.done);
+    title="Completed · "+p.name;
+    intro="Done and dusted — here's what you've already finished.";
+  }else if(filter==="overdue"){
+    tasks=tasks.filter(t=>!t.done && (function(){const e=parseD(t.end);return e&&e<today;})());
+    title="Overdue · "+p.name;
+    intro="Past their deadline — knock these out first, or push the dates.";
+  }else{
+    title="Tasks · "+p.name;
+    intro="Everything in this project — still-open items up top.";
+  }
+  tasks.sort((a,b)=>{
+    if(!!a.done!==!!b.done) return a.done?1:-1;
+    return taskPriority(b).score - taskPriority(a).score;
+  });
+  document.getElementById("tileTitle").textContent=title;
+  const body=document.getElementById("tileBody");
+  if(!tasks.length){
+    const msg = filter==="overdue" ? "Nothing overdue — you're on top of it." :
+                filter==="done" ? "Nothing checked off yet. Go finish something!" :
+                "No tasks in this project yet.";
+    body.innerHTML=`<div class="tl-empty">${msg}</div>`;
+  }else{
+    let html=`<p class="tl-intro">${intro}</p>`;
+    tasks.forEach(t=>{
+      const pr=taskPriority(t);
+      const stars=(!t.done&&pr.stars>0)?` <span class="stars">${"\u2605".repeat(pr.stars)}</span>`:"";
+      const badge=t.done? `<span class="pbadge p-done">Done</span>` : `<span class="pbadge ${pr.cls}">${esc(pr.urgLabel)}</span>`;
+      const de=parseD(t.end), ds=parseD(t.start);
+      const date = de? `<span class="tl-date">due ${fmtShort(de)}</span>` : (ds? `<span class="tl-date">starts ${fmtShort(ds)}</span>`:"");
+      const pin=(!t.done&&t.pinned)?` <span class="pbadge p-pin">Pinned</span>`:"";
+      html+=`<div class="tl-row${t.done?" tl-done":""}"><span class="tl-name">${esc(t.name)}${stars}</span><span class="tl-meta">${date}${pin}${badge}</span></div>`;
+    });
+    body.innerHTML=html;
+  }
+  document.getElementById("tileOverlay").classList.add("open");
+}
+function closeTile(){ document.getElementById("tileOverlay").classList.remove("open"); }
+
 /* ---------- Tips: grouped mini-menu ---------- */
 const TIPS=[
   {id:"start",label:"Getting started",html:`
@@ -2216,7 +2294,15 @@ document.getElementById("estBtn").onclick=openEst;
 document.getElementById("closeEst").onclick=closeEst;
 document.getElementById("estOverlay").addEventListener("click",e=>{ if(e.target.id==="estOverlay") closeEst(); });
 document.getElementById("estCalc").onclick=runEstimate;
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeGantt(); closeAsst(); closeEst(); closeGoogle(); closeChat(); closeTips(); } });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeGantt(); closeAsst(); closeEst(); closeGoogle(); closeChat(); closeTips(); closeTile(); } });
+
+/* Tile reminders */
+["tileAll","tileDone","tileOver"].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.onclick=()=>openTile(el.dataset.f);
+});
+document.getElementById("closeTile").onclick=closeTile;
+document.getElementById("tileOverlay").addEventListener("click",e=>{ if(e.target.id==="tileOverlay") closeTile(); });
 
 /* Tips wiring */
 document.getElementById("tipsBtn").onclick=openTips;
@@ -2271,6 +2357,8 @@ document.getElementById("tabAdd").onclick=()=>{
   if(el) el.textContent="Today · "+s;
   const fy=document.getElementById("footYear");
   if(fy) fy.textContent=new Date().getFullYear();
+  const ly=document.getElementById("loginYear");
+  if(ly) ly.textContent=new Date().getFullYear();
 })();
 
 /* ---------- Front-page login (local profile) ---------- */
@@ -2281,7 +2369,7 @@ function initLogin(){
   const btn=document.getElementById("loginBtn");
   const pinWrap=document.getElementById("loginPinWrap");
   const note=document.getElementById("loginNote");
-  note.textContent="Your profile stays on this device — there's no account or server. You can connect Google Calendar once you're in.";
+  note.textContent="";
   if(name){
     sub.textContent="Welcome back, "+name;
     document.getElementById("loginName").value=name;
