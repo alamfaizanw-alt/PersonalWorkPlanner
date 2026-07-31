@@ -506,6 +506,17 @@
 
   .hint{font-size:.8rem;color:var(--cream-dim);text-align:center;margin-top:26px;font-style:italic;}
 
+  /* ---- Footer ---- */
+  .app-foot{
+    display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+    margin-top:36px;padding-top:16px;border-top:1px solid var(--line);position:relative;
+    font-size:.84rem;color:var(--cream-dim);letter-spacing:.03em;
+  }
+  .app-foot::before{content:"";position:absolute;left:0;top:-1px;height:1px;width:130px;background:linear-gradient(90deg,var(--gold),transparent);}
+  .app-foot .by{font-style:italic;}
+  .app-foot .by b{color:var(--gold);font-style:normal;font-weight:700;letter-spacing:.02em;}
+  .app-foot .cr{color:var(--gold-soft);font-variant-numeric:tabular-nums;}
+
   /* ---- Today line in hero ---- */
   .today-line{display:block;font-size:.7rem;color:var(--gold-soft);text-transform:uppercase;letter-spacing:.2em;margin-bottom:8px;font-family:Georgia,"Times New Roman",serif;}
 
@@ -650,6 +661,11 @@
 
   <p class="hint">Tip: tap a task's checkbox to mark it complete. Edit or delete with the buttons on the right.</p>
   </section>
+
+  <footer class="app-foot">
+    <span class="by">Designed by <b>Faizan Alam</b></span>
+    <span class="cr">&copy; <span id="footYear">2026</span></span>
+  </footer>
 </div>
 
 <!-- Gantt pop-up -->
@@ -1927,6 +1943,8 @@ document.getElementById("tabAdd").onclick=()=>{
   const s=d.toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric"});
   const el=document.getElementById("todayLine");
   if(el) el.textContent="Today · "+s;
+  const fy=document.getElementById("footYear");
+  if(fy) fy.textContent=new Date().getFullYear();
 })();
 
 render();
