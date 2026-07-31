@@ -33,7 +33,8 @@
     --metal-hover:linear-gradient(180deg,#f2da95 0%,#d3aa52 46%,#b28a33 100%);
     --edge:inset 0 1px 0 rgba(255,246,220,.10);
     --focus:0 0 0 2px var(--black), 0 0 0 4px rgba(203,161,74,.5);
-    font-family:"Times New Roman", Times, Georgia, serif;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+    letter-spacing:-0.006em;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -87,38 +88,78 @@
 
   /* ---- Header ---- */
   header.app{
-    display:flex;align-items:flex-end;justify-content:space-between;
+    display:flex;align-items:center;justify-content:space-between;
     gap:20px;flex-wrap:wrap;
     border-bottom:1px solid var(--line);
-    padding-bottom:20px;margin-bottom:26px;
-    position:relative;
+    padding:12px 18px;margin:0 -18px 22px;
+    position:sticky;top:0;z-index:40;
+    background:rgba(11,11,12,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   }
   header.app::after{
-    content:"";position:absolute;left:0;bottom:-1px;height:1px;width:180px;
+    content:"";position:absolute;left:18px;bottom:-1px;height:1px;width:160px;
     background:linear-gradient(90deg,var(--gold),transparent);
   }
-  .brand{display:flex;align-items:center;gap:16px;}
+  .brand{display:flex;align-items:center;gap:13px;}
   .mark{
-    flex:0 0 auto;width:52px;height:52px;border-radius:12px;
+    flex:0 0 auto;width:42px;height:42px;border-radius:11px;
     background:radial-gradient(120% 120% at 30% 20%, #201c16, #0d0b09);
     border:1px solid var(--line);box-shadow:var(--edge),0 6px 18px -6px rgba(0,0,0,.7);
     display:flex;align-items:center;justify-content:center;
   }
-  .mark svg{width:30px;height:30px;display:block;}
-  .brand .eyebrow{
-    font-size:.68rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-soft);
-    margin:0 0 3px;font-family:Georgia,"Times New Roman",serif;
-  }
+  .mark svg{width:25px;height:25px;display:block;}
   .brand h1{
-    margin:0;font-size:2.5rem;font-weight:700;letter-spacing:.4px;line-height:1;
+    margin:0;font-size:1.5rem;font-weight:700;letter-spacing:.4px;line-height:1;
     background:linear-gradient(180deg,#f3dd9a 0%,#cba14a 55%,#a9812c 100%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
     -webkit-text-fill-color:transparent;
     filter:drop-shadow(0 1px 0 #000);
   }
-  .brand .tag{margin:.4rem 0 0;font-style:italic;color:var(--cream-dim);font-size:1rem;}
   .gold-rule{color:var(--gold);font-style:normal;}
-  @media(max-width:560px){ .brand h1{font-size:2rem;} .mark{width:44px;height:44px;} .mark svg{width:26px;height:26px;} }
+
+  /* ---- Account button ---- */
+  .acct-btn{
+    width:40px;height:40px;border-radius:50%;flex:0 0 auto;
+    background:var(--metal);color:#241a06;border:1px solid #8a6f1f;
+    font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--edge);cursor:pointer;transition:transform .12s ease,box-shadow .18s ease;
+  }
+  .acct-btn:hover{transform:translateY(-1px);box-shadow:var(--edge),0 6px 16px -6px rgba(0,0,0,.7);}
+
+  /* ---- Login front page ---- */
+  .login-screen{
+    position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:22px;
+    background:
+      linear-gradient(rgba(127,96,0,.05) 1px,transparent 1px) 0 0/30px 30px,
+      linear-gradient(90deg,rgba(127,96,0,.05) 1px,transparent 1px) 0 0/30px 30px,
+      radial-gradient(120% 90% at 50% -10%, rgba(203,161,74,.12), transparent 60%),
+      var(--black);
+  }
+  .login-screen.hidden{display:none;}
+  .login-card{
+    width:min(400px,100%);background:linear-gradient(180deg,#161310,#0d0b09);
+    border:1px solid rgba(203,161,74,.28);border-radius:22px;padding:36px 32px;
+    box-shadow:var(--shadow-lg);text-align:center;position:relative;overflow:hidden;
+    animation:modalIn .4s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .login-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold-bright),transparent);opacity:.8;}
+  .login-mark{width:62px;height:62px;margin:0 auto 18px;border-radius:15px;}
+  .login-mark svg{width:36px;height:36px;}
+  .login-title{
+    margin:0;font-size:1.7rem;font-weight:700;letter-spacing:-0.01em;
+    background:linear-gradient(180deg,#f3dd9a 0%,#cba14a 55%,#a9812c 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  }
+  .login-sub{color:var(--cream-dim);margin:6px 0 24px;font-size:.98rem;}
+  .login-field{text-align:left;margin-bottom:14px;}
+  .login-field label{display:block;font-size:.74rem;color:var(--cream-dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+  .login-field input{
+    width:100%;font-family:inherit;font-size:1.02rem;background:#0c0b09;color:var(--cream);
+    border:1px solid var(--line);border-radius:11px;padding:12px 14px;
+  }
+  .login-field input:focus{outline:none;border-color:var(--gold-soft);box-shadow:0 0 0 3px rgba(203,161,74,.18);}
+  .login-btn{width:100%;margin-top:8px;padding:13px;font-size:1.02rem;}
+  .login-note{font-size:.78rem;color:var(--cream-dim);margin:18px 0 0;line-height:1.55;}
+  @media(max-width:560px){ .brand h1{font-size:1.3rem;} .mark{width:38px;height:38px;} .mark svg{width:22px;height:22px;} header.app{padding:10px 18px;margin:0 -18px 18px;} }
 
   button{font-family:inherit;cursor:pointer;}
 
@@ -241,6 +282,26 @@
   .panel .section-title{margin-top:20px;}
   .panel .form{margin-top:18px;}
 
+  /* ---- Dashboard flow: tasks main + sticky overview rail ---- */
+  .dashboard{display:grid;gap:22px;margin-bottom:22px;}
+  @media(min-width:920px){
+    .dashboard{grid-template-columns:minmax(0,1fr) 330px;align-items:start;}
+    .dashboard>.panel{order:1;min-width:0;}
+    .dashboard>.progress-card{order:2;position:sticky;top:78px;flex-direction:column;text-align:center;align-items:center;gap:18px;}
+    .dashboard>.progress-card .progress-side{width:100%;text-align:center;}
+    .dashboard>.progress-card .stat-tiles{justify-content:center;}
+  }
+
+  /* ---- Panel header (SaaS list header) ---- */
+  .panel-head{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:18px 0 4px;border-bottom:1px solid var(--line);margin-bottom:4px;position:relative;
+  }
+  .panel-head::after{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:110px;background:linear-gradient(90deg,var(--gold),transparent);}
+  .panel-title{margin:0;font-size:1.15rem;color:var(--gold);letter-spacing:.4px;font-weight:700;}
+  .panel-title::before{content:"\25C6";color:var(--gold-soft);font-size:.62em;margin-right:9px;vertical-align:middle;}
+  .panel-title .count{color:var(--cream-dim);font-size:.82rem;font-weight:400;margin-left:6px;letter-spacing:.02em;}
+
   /* ---- Task list ---- */
   .section-title{
     font-size:1.05rem;color:var(--gold);letter-spacing:1px;text-transform:uppercase;
@@ -287,8 +348,8 @@
 
   /* ---- Add / edit form ---- */
   .form{
-    background:var(--panel-2);border:1px dashed var(--line);border-radius:12px;
-    padding:14px;margin-top:14px;
+    background:linear-gradient(180deg,#151209,#100e0a);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:16px;margin-top:16px;box-shadow:var(--edge),inset 0 1px 0 rgba(0,0,0,.4);
     display:flex;flex-wrap:wrap;gap:10px;align-items:end;
   }
   .form .field{display:flex;flex-direction:column;gap:4px;flex:1 1 130px;min-width:110px;}
@@ -518,7 +579,7 @@
   .app-foot .cr{color:var(--gold-soft);font-variant-numeric:tabular-nums;}
 
   /* ---- Today line in hero ---- */
-  .today-line{display:block;font-size:.7rem;color:var(--gold-soft);text-transform:uppercase;letter-spacing:.2em;margin-bottom:8px;font-family:Georgia,"Times New Roman",serif;}
+  .today-line{display:block;font-size:.7rem;color:var(--gold-soft);text-transform:uppercase;letter-spacing:.2em;margin-bottom:8px;font-family:inherit;}
 
   /* ---- App-style bottom tab bar (mobile) ---- */
   .tabbar{
@@ -575,11 +636,7 @@
           </g>
         </svg>
       </span>
-      <div>
-        <p class="eyebrow">Personal Workflow Instrument</p>
-        <h1>Work Flow Assist</h1>
-        <p class="tag">Organize tasks into priorities &amp; time frames <span class="gold-rule">&#9670;</span> and see the path ahead.</p>
-      </div>
+      <h1>Work Flow Assist</h1>
     </div>
     <div class="header-right">
       <button class="iconbtn-lg" id="chatBtn" title="Assistant chat" aria-label="Assistant chat">
@@ -592,11 +649,13 @@
         <button class="btn ghost" id="openAsst">Plan My Day</button>
         <button class="btn" id="openGantt">View Gantt Chart</button>
       </div>
+      <button class="acct-btn" id="acctBtn" title="Account" aria-label="Account" style="display:none;">?</button>
     </div>
   </header>
 
   <div class="projects" id="projectBar"></div>
 
+  <div class="dashboard">
   <div class="progress-card">
     <div class="ring-wrap">
       <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
@@ -624,7 +683,10 @@
   </div>
 
   <section class="panel">
-  <div class="section-title">Daily Task Tracker</div>
+  <div class="panel-head">
+    <h3 class="panel-title">Tasks <span class="count" id="taskCount"></span></h3>
+    <button class="btn sm" id="newTaskBtn">+ New task</button>
+  </div>
   <ul class="tasks" id="taskList"></ul>
 
   <div class="form" id="taskForm">
@@ -661,6 +723,7 @@
 
   <p class="hint">Tip: tap a task's checkbox to mark it complete. Edit or delete with the buttons on the right.</p>
   </section>
+  </div>
 
   <footer class="app-foot">
     <span class="by">Designed by <b>Faizan Alam</b></span>
@@ -890,6 +953,40 @@
   </button>
 </nav>
 
+<!-- Front page: local profile login -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <span class="mark login-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="mg2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f3dd9a"/><stop offset="0.55" stop-color="#cba14a"/><stop offset="1" stop-color="#a9812c"/>
+        </linearGradient></defs>
+        <path d="M16 2 L19 7 L16 12 L13 7 Z" fill="url(#mg2)"/>
+        <circle cx="16" cy="20" r="6.2" fill="none" stroke="url(#mg2)" stroke-width="1.6"/>
+        <circle cx="16" cy="20" r="2.1" fill="url(#mg2)"/>
+        <g stroke="url(#mg2)" stroke-width="1.6" stroke-linecap="round">
+          <line x1="16" y1="12.2" x2="16" y2="13.8"/><line x1="16" y1="26.2" x2="16" y2="27.8"/>
+          <line x1="8.8" y1="20" x2="10.4" y2="20"/><line x1="21.6" y1="20" x2="23.2" y2="20"/>
+          <line x1="11" y1="15" x2="12.1" y2="16.1"/><line x1="19.9" y1="23.9" x2="21" y2="25"/>
+          <line x1="21" y1="15" x2="19.9" y2="16.1"/><line x1="12.1" y1="23.9" x2="11" y2="25"/>
+        </g>
+      </svg>
+    </span>
+    <h1 class="login-title">Work Flow Assist</h1>
+    <p class="login-sub" id="loginSub">Sign in to your workspace</p>
+    <div class="login-field">
+      <label for="loginName">Name</label>
+      <input id="loginName" type="text" placeholder="Your name" autocomplete="name">
+    </div>
+    <div class="login-field" id="loginPinWrap">
+      <label for="loginPin">PIN <span style="text-transform:none;letter-spacing:0;color:var(--cream-dim);">(optional — locks this device)</span></label>
+      <input id="loginPin" type="password" inputmode="numeric" placeholder="Add a PIN" autocomplete="off">
+    </div>
+    <button class="btn login-btn" id="loginBtn">Get started</button>
+    <p class="login-note" id="loginNote">Your profile stays on this device — there's no account or server. You can connect Google Calendar once you're in.</p>
+  </div>
+</div>
+
 <script>
 /* ---------- storage: localStorage with in-memory fallback ---------- */
 const Store = (()=>{
@@ -926,6 +1023,9 @@ function load(){
   if(!s.ai || typeof s.ai!=="object") s.ai={};
   if(typeof s.ai.key!=="string") s.ai.key="";
   if(typeof s.ai.model!=="string" || !s.ai.model) s.ai.model="claude-haiku-4-5-20251001";
+  if(!s.profile || typeof s.profile!=="object") s.profile={};
+  if(typeof s.profile.name!=="string") s.profile.name="";
+  if(typeof s.profile.pin!=="string") s.profile.pin="";
   return s;
 }
 function save(){ Store.set(KEY, JSON.stringify(state)); }
@@ -1002,6 +1102,9 @@ function renderTasks(){
   const p=current();
   const ul=document.getElementById("taskList");
   ul.innerHTML="";
+  const openCount=p.tasks.filter(t=>!t.done).length;
+  const cnt=document.getElementById("taskCount");
+  if(cnt) cnt.textContent = p.tasks.length? "· "+openCount+" open" : "";
   if(!p.tasks.length){
     const li=document.createElement("li");li.className="empty";
     li.textContent="No tasks here yet. Add your first one below.";
@@ -1876,6 +1979,11 @@ function sendChat(){
 
 /* ---------- wire up ---------- */
 document.getElementById("addBtn").onclick=addTask;
+document.getElementById("newTaskBtn").onclick=()=>{
+  const f=document.getElementById("taskForm");
+  f.scrollIntoView({behavior:"smooth",block:"center"});
+  setTimeout(()=>document.getElementById("fName").focus(),300);
+};
 document.getElementById("fName").addEventListener("keydown",e=>{ if(e.key==="Enter") addTask(); });
 document.getElementById("openGantt").onclick=openGantt;
 document.getElementById("closeGantt").onclick=closeGantt;
@@ -1947,9 +2055,59 @@ document.getElementById("tabAdd").onclick=()=>{
   if(fy) fy.textContent=new Date().getFullYear();
 })();
 
-render();
+/* ---------- Front-page login (local profile) ---------- */
+let loginOk=false;
+function initLogin(){
+  const name=state.profile.name, hasPin=!!state.profile.pin;
+  const sub=document.getElementById("loginSub");
+  const btn=document.getElementById("loginBtn");
+  const pinWrap=document.getElementById("loginPinWrap");
+  const note=document.getElementById("loginNote");
+  note.textContent="Your profile stays on this device — there's no account or server. You can connect Google Calendar once you're in.";
+  if(name){
+    sub.textContent="Welcome back, "+name;
+    document.getElementById("loginName").value=name;
+    btn.textContent="Log in";
+    pinWrap.style.display = hasPin? "block":"none";
+    document.getElementById("loginPin").placeholder = hasPin? "Enter your PIN":"Add a PIN";
+  }else{
+    sub.textContent="Set up your workspace";
+    btn.textContent="Get started";
+    pinWrap.style.display="block";
+  }
+}
+function doLogin(){
+  const name=document.getElementById("loginName").value.trim();
+  const pin=document.getElementById("loginPin").value;
+  const note=document.getElementById("loginNote");
+  if(!name){ document.getElementById("loginName").focus(); return; }
+  if(state.profile.name){
+    if(state.profile.pin && pin!==state.profile.pin){ note.textContent="Incorrect PIN — try again."; return; }
+  }else{
+    state.profile.name=name; state.profile.pin=pin||""; save();
+  }
+  loginOk=true;
+  const a=document.getElementById("acctBtn");
+  a.textContent=(state.profile.name.trim()[0]||"?").toUpperCase();
+  a.style.display="flex";
+  document.getElementById("loginScreen").classList.add("hidden");
+  render();
+}
+async function logout(){
+  const ok=await uiConfirm("Log out of this device? Your tasks stay saved here.","Log out");
+  if(!ok) return;
+  loginOk=false;
+  document.getElementById("loginPin").value="";
+  initLogin();
+  document.getElementById("loginScreen").classList.remove("hidden");
+}
+document.getElementById("loginBtn").onclick=doLogin;
+document.getElementById("loginName").addEventListener("keydown",e=>{ if(e.key==="Enter") doLogin(); });
+document.getElementById("loginPin").addEventListener("keydown",e=>{ if(e.key==="Enter") doLogin(); });
+document.getElementById("acctBtn").onclick=logout;
+initLogin();
 
-/* ---------- PWA: offline + installable ---------- */
+render();
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); });
 }
