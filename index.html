@@ -7,7 +7,9 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0b0c'/%3E%3Cpath d='M16 5 L22 16 L16 27 L10 16 Z' fill='%23cba14a'/%3E%3C/svg%3E">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Work Flow">
 <style>
@@ -180,6 +182,18 @@
   .gsteps li{margin:6px 0;}
   .gsteps a{color:var(--gold);}
   .gsteps code{background:#0c0b09;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-family:Consolas,Menlo,monospace;font-size:.85em;color:var(--gold-bright);}
+
+  /* ---- Notes ---- */
+  .note-area{
+    width:100%;font-family:inherit;font-size:1rem;line-height:1.5;background:#0c0b09;color:var(--cream);
+    border:1px solid var(--line);border-radius:10px;padding:11px 13px;resize:vertical;min-height:56px;
+  }
+  .note-area:focus{outline:none;border-color:var(--gold-soft);box-shadow:0 0 0 2px rgba(203,161,74,.18);}
+  .note-modal{width:min(540px,100%);}
+  .tname{cursor:pointer;display:inline-flex;align-items:center;gap:7px;border-radius:5px;transition:color .15s ease;}
+  .tname:hover{color:var(--gold-bright);}
+  .note-dot{display:inline-flex;color:var(--gold-soft);flex:0 0 auto;}
+  .note-dot svg{width:15px;height:15px;display:block;}
 
   /* ---- Tile detail list ---- */
   .tl-intro{color:var(--cream-dim);font-style:italic;margin:0 0 16px;line-height:1.5;}
@@ -407,12 +421,14 @@
   }
   .form .field{display:flex;flex-direction:column;gap:4px;flex:1 1 130px;min-width:110px;}
   .form .field.name{flex:1 1 100%;}
+  .form .field.desc{flex:1 1 100%;}
   .form label{font-size:.78rem;color:var(--cream-dim);letter-spacing:.5px;text-transform:uppercase;}
-  .form input,.form select{
+  .form input,.form select,.form textarea{
     font-family:inherit;font-size:1rem;background:#0c0b09;color:var(--cream);
     border:1px solid var(--line);border-radius:8px;padding:9px 11px;min-width:0;color-scheme:dark;
   }
-  .form input:focus,.form select:focus{outline:none;border-color:var(--gold-soft);box-shadow:0 0 0 2px rgba(203,161,74,.18);}
+  .form textarea{resize:vertical;line-height:1.45;}
+  .form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--gold-soft);box-shadow:0 0 0 2px rgba(203,161,74,.18);}
   .form .actions{display:flex;gap:10px;flex:1 1 100%;justify-content:flex-end;flex-wrap:wrap;}
   @media(max-width:640px){
     .form .actions{justify-content:stretch;}
@@ -757,6 +773,10 @@
       <label for="fName">Task</label>
       <input id="fName" type="text" placeholder="e.g. Draft project proposal" autocomplete="off">
     </div>
+    <div class="field desc">
+      <label for="fDesc">Details <span style="text-transform:none;letter-spacing:0;color:var(--cream-dim);">(what to do — optional)</span></label>
+      <textarea id="fDesc" rows="2" placeholder="A note to your future self: what this actually involves…"></textarea>
+    </div>
     <div class="field">
       <label for="fStart">Start</label>
       <input id="fStart" type="date">
@@ -802,6 +822,23 @@
       <button class="closex" id="closeTile" aria-label="Close">&times;</button>
     </div>
     <div class="asst-body" id="tileBody"></div>
+  </div>
+</div>
+
+<!-- Task notes -->
+<div class="overlay" id="noteOverlay">
+  <div class="modal note-modal">
+    <div class="modal-head">
+      <h2 id="noteTitle">Notes</h2>
+      <button class="closex" id="closeNote" aria-label="Close">&times;</button>
+    </div>
+    <div class="asst-body">
+      <textarea id="noteText" class="note-area" rows="7" placeholder="What needs doing? Jot the details here…"></textarea>
+      <div style="display:flex;gap:10px;margin-top:14px;justify-content:flex-end;">
+        <button class="btn ghost" id="noteCancel">Close</button>
+        <button class="btn" id="noteSave">Save note</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1215,10 +1252,11 @@ function renderTasks(){
     const pinChip=(!t.done&&t.pinned)? `<span class="pbadge p-pin">Pinned</span>` : "";
     const stars=(!t.done&&pri.stars>0)? `<span class="stars" title="${esc(pri.imp.name)} importance">${"\u2605".repeat(pri.stars)}</span>` : "";
     const hoursLabel=(typeof t.hours==="number"&&t.hours>0)? `<span class="durlabel">${t.hours}h</span>` : "";
+    const noteDot=(t.desc&&t.desc.trim())? `<span class="note-dot" title="Has notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 10h16M4 15h10"/></svg></span>` : "";
     li.innerHTML=`
       <button class="check" title="Toggle complete">${t.done?"\u2713":""}</button>
       <div class="tmid">
-        <div class="tname">${esc(t.name)}${stars}</div>
+        <div class="tname" title="View / edit notes">${esc(t.name)}${stars}${noteDot}</div>
         <div class="tmeta">
           ${pinChip}${badge}
           <span class="tdates">${dateLabel(t)}</span>
@@ -1232,6 +1270,7 @@ function renderTasks(){
         <button class="icon-btn del">Delete</button>
       </div>`;
     li.querySelector(".check").onclick=()=>{ t.done=!t.done; render(); };
+    li.querySelector(".tname").onclick=()=>openNote(t);
     li.querySelector(".pin").onclick=()=>{ t.pinned=!t.pinned; render(); };
     li.querySelector(".edit").onclick=()=>editTask(t);
     li.querySelector(".del").onclick=()=>{ if(t.gTaskId) state.google.pendingDeletes.push(t.gTaskId); p.tasks=p.tasks.filter(x=>x.id!==t.id); render(); };
@@ -1258,8 +1297,10 @@ function addTask(){
   const hf=parseFloat(hraw);
   const hours=(!isNaN(hf)&&hf>0)? hf : null;
   const importance=document.getElementById("fImp").value||"normal";
-  current().tasks.push({id:uid(),name,start,end,hours,importance,pinned:false,done:false});
+  const desc=document.getElementById("fDesc").value.trim();
+  current().tasks.push({id:uid(),name,desc,start,end,hours,importance,pinned:false,done:false});
   document.getElementById("fName").value="";
+  document.getElementById("fDesc").value="";
   document.getElementById("fStart").value="";
   document.getElementById("fEnd").value="";
   document.getElementById("fHours").value="";
@@ -1272,6 +1313,7 @@ async function editTask(t){
     title:"Edit Task",
     fields:[
       {key:"name",label:"Task",type:"text",value:t.name},
+      {key:"desc",label:"Details (what to do)",type:"textarea",value:t.desc||""},
       {key:"importance",label:"Importance",type:"select",value:(t.importance||"normal"),options:[
         {value:"low",label:"Low"},{value:"normal",label:"Normal"},{value:"high",label:"High"},{value:"critical",label:"Critical"}
       ]},
@@ -1283,6 +1325,7 @@ async function editTask(t){
   });
   if(!res) return;
   if(res.name.trim()) t.name=res.name.trim();
+  t.desc=res.desc.trim();
   t.importance=res.importance||"normal";
   t.start=res.start; t.end=res.end;
   const hf=parseFloat(res.hours);
@@ -1343,6 +1386,8 @@ function uiDialog({title,message,fields=[],okLabel="OK",cancelLabel="Cancel",noC
         inner+=`<select id="dlg_f${i}">`+
           (f.options||[]).map(o=>`<option value="${esc(o.value)}"${o.value===f.value?" selected":""}>${esc(o.label)}</option>`).join("")+
           `</select>`;
+      }else if(f.type==="textarea"){
+        inner+=`<textarea id="dlg_f${i}" rows="3" ${f.placeholder?`placeholder="${esc(f.placeholder)}"`:""}>${esc(f.value??"")}</textarea>`;
       }else{
         inner+=`<input id="dlg_f${i}" type="${f.type||"text"}" value="${esc(f.value??"")}" ${f.placeholder?`placeholder="${esc(f.placeholder)}"`:""}>`;
       }
@@ -1389,6 +1434,7 @@ function closeAllOverlays(){
   var c=document.getElementById("chatOverlay"); if(c) c.classList.remove("open");
   var tp=document.getElementById("tipsOverlay"); if(tp) tp.classList.remove("open");
   var tl=document.getElementById("tileOverlay"); if(tl) tl.classList.remove("open");
+  var nt=document.getElementById("noteOverlay"); if(nt) nt.classList.remove("open");
 }
 function openGantt(){
   closeAllOverlays();
@@ -2005,6 +2051,22 @@ function openTile(filter){
 }
 function closeTile(){ document.getElementById("tileOverlay").classList.remove("open"); }
 
+/* ---------- Task notes (view/edit the task's details) ---------- */
+let noteTask=null;
+function openNote(t){
+  closeAllOverlays();
+  noteTask=t;
+  document.getElementById("noteTitle").textContent=t.name;
+  document.getElementById("noteText").value=t.desc||"";
+  document.getElementById("noteOverlay").classList.add("open");
+  setTimeout(()=>document.getElementById("noteText").focus(),80);
+}
+function closeNote(){ document.getElementById("noteOverlay").classList.remove("open"); }
+function saveNote(){
+  if(noteTask){ noteTask.desc=document.getElementById("noteText").value.trim(); save(); render(); }
+  closeNote();
+}
+
 /* ---------- Tips: grouped mini-menu ---------- */
 const TIPS=[
   {id:"start",label:"Getting started",html:`
@@ -2294,7 +2356,7 @@ document.getElementById("estBtn").onclick=openEst;
 document.getElementById("closeEst").onclick=closeEst;
 document.getElementById("estOverlay").addEventListener("click",e=>{ if(e.target.id==="estOverlay") closeEst(); });
 document.getElementById("estCalc").onclick=runEstimate;
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeGantt(); closeAsst(); closeEst(); closeGoogle(); closeChat(); closeTips(); closeTile(); } });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeGantt(); closeAsst(); closeEst(); closeGoogle(); closeChat(); closeTips(); closeTile(); closeNote(); } });
 
 /* Tile reminders */
 ["tileAll","tileDone","tileOver"].forEach(id=>{
@@ -2303,6 +2365,12 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeGantt(); clo
 });
 document.getElementById("closeTile").onclick=closeTile;
 document.getElementById("tileOverlay").addEventListener("click",e=>{ if(e.target.id==="tileOverlay") closeTile(); });
+
+/* Task notes */
+document.getElementById("closeNote").onclick=closeNote;
+document.getElementById("noteCancel").onclick=closeNote;
+document.getElementById("noteSave").onclick=saveNote;
+document.getElementById("noteOverlay").addEventListener("click",e=>{ if(e.target.id==="noteOverlay") closeNote(); });
 
 /* Tips wiring */
 document.getElementById("tipsBtn").onclick=openTips;
