@@ -162,6 +162,11 @@
   .login-btn{width:100%;margin-top:8px;padding:13px;font-size:1.02rem;}
   .login-note{font-size:.78rem;color:var(--cream-dim);margin:18px 0 0;line-height:1.55;}
   .login-note:empty{display:none;}
+  .login-reset{
+    display:block;margin:12px auto 0;background:none;border:none;color:var(--gold-soft);
+    font-family:inherit;font-size:.82rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+  }
+  .login-reset:hover{color:var(--gold-bright);}
   .login-credit{font-size:.78rem;color:var(--cream-dim);margin:20px 0 0;letter-spacing:.02em;}
   .login-credit b{color:var(--gold);font-weight:600;}
   @media(max-width:560px){ .brand h1{font-size:1.3rem;} .mark{width:38px;height:38px;} .mark svg{width:22px;height:22px;} header.app{padding:10px 18px;margin:0 -18px 18px;} }
@@ -507,11 +512,15 @@
   .dlg-overlay.open{display:flex;animation:ovFade .2s ease both;}
   .dlg{
     background:linear-gradient(180deg,#161310,#0d0b09);
-    border:1px solid rgba(203,161,74,.35);border-radius:16px;position:relative;overflow:hidden;
-    width:min(440px,100%);box-shadow:var(--shadow-lg);
+    border:1px solid rgba(203,161,74,.35);border-radius:16px;position:relative;
+    width:min(440px,100%);max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:var(--shadow-lg);
     padding:24px;animation:modalIn .28s cubic-bezier(.2,.8,.2,1) both;
   }
   .dlg::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold-bright),transparent);opacity:.7;}
+  .dlg-checklist{display:flex;flex-direction:column;gap:7px;max-height:150px;overflow-y:auto;background:#0c0b09;border:1px solid var(--line);border-radius:8px;padding:9px 11px;}
+  .dlg-check{display:flex;align-items:center;gap:9px;color:var(--cream);font-size:.98rem;cursor:pointer;}
+  .dlg-check input{width:16px;height:16px;accent-color:var(--gold);flex:0 0 auto;}
+  .dlg-empty{color:var(--cream-dim);font-style:italic;font-size:.9rem;}
   .dlg h3{margin:0 0 4px;color:var(--gold);font-size:1.5rem;}
   .dlg p.msg{margin:0 0 14px;color:var(--cream-dim);font-size:1rem;}
   .dlg .field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
@@ -1113,6 +1122,7 @@
       <input id="loginPin" type="password" inputmode="numeric" placeholder="Add a PIN" autocomplete="off">
     </div>
     <button class="btn login-btn" id="loginBtn">Get started</button>
+    <button class="login-reset" id="loginReset" type="button" style="display:none;">Forgot PIN? Reset it (keeps your tasks)</button>
     <p class="login-note" id="loginNote"></p>
     <p class="login-credit">Designed by <b>Faizan Alam</b> &nbsp;&#8226;&nbsp; &copy; <span id="loginYear">2026</span></p>
   </div>
@@ -1309,6 +1319,8 @@ function addTask(){
   document.getElementById("fName").focus();
 }
 async function editTask(t){
+  const p=current();
+  const depOptions=p.tasks.filter(x=>x.id!==t.id).map(x=>({value:x.id,label:x.name}));
   const res=await uiDialog({
     title:"Edit Task",
     fields:[
@@ -1317,9 +1329,12 @@ async function editTask(t){
       {key:"importance",label:"Importance",type:"select",value:(t.importance||"normal"),options:[
         {value:"low",label:"Low"},{value:"normal",label:"Normal"},{value:"high",label:"High"},{value:"critical",label:"Critical"}
       ]},
-      {key:"start",label:"Start",type:"date",value:t.start||""},
-      {key:"end",label:"End",type:"date",value:t.end||""},
-      {key:"hours",label:"Est. hours",type:"number",value:(typeof t.hours==="number"&&t.hours>0)?t.hours:""}
+      {key:"start",label:"Start date",type:"date",value:t.start||""},
+      {key:"end",label:"End date",type:"date",value:t.end||""},
+      {key:"hours",label:"Est. hours",type:"number",value:(typeof t.hours==="number"&&t.hours>0)?t.hours:""},
+      {key:"earliest",label:"Not before (time of day)",type:"time",value:t.earliest||""},
+      {key:"latest",label:"Must finish by (time of day)",type:"time",value:t.latest||""},
+      {key:"deps",label:"Depends on (must finish first)",type:"checklist",value:(t.deps||[]),options:depOptions}
     ],
     okLabel:"Save"
   });
@@ -1330,6 +1345,10 @@ async function editTask(t){
   t.start=res.start; t.end=res.end;
   const hf=parseFloat(res.hours);
   t.hours=(!isNaN(hf)&&hf>0)? hf : null;
+  t.earliest=res.earliest||"";
+  t.latest=res.latest||"";
+  t.deps=Array.isArray(res.deps)? res.deps : [];
+  if(t.earliest&&t.latest&&parseTimeToDec(t.latest)<=parseTimeToDec(t.earliest)) t.latest="";
   if(t.start&&!t.end) t.end=t.start;
   if(t.start&&t.end&&parseD(t.end)<parseD(t.start)) t.end=t.start;
   render();
@@ -1388,6 +1407,11 @@ function uiDialog({title,message,fields=[],okLabel="OK",cancelLabel="Cancel",noC
           `</select>`;
       }else if(f.type==="textarea"){
         inner+=`<textarea id="dlg_f${i}" rows="3" ${f.placeholder?`placeholder="${esc(f.placeholder)}"`:""}>${esc(f.value??"")}</textarea>`;
+      }else if(f.type==="checklist"){
+        const opts=f.options||[];
+        inner+= opts.length
+          ? `<div id="dlg_f${i}" class="dlg-checklist">`+opts.map(o=>`<label class="dlg-check"><input type="checkbox" value="${esc(o.value)}"${(f.value||[]).indexOf(o.value)>=0?" checked":""}> ${esc(o.label)}</label>`).join("")+`</div>`
+          : `<div id="dlg_f${i}" class="dlg-checklist"><span class="dlg-empty">No other tasks yet — add more and they'll show here.</span></div>`;
       }else{
         inner+=`<input id="dlg_f${i}" type="${f.type||"text"}" value="${esc(f.value??"")}" ${f.placeholder?`placeholder="${esc(f.placeholder)}"`:""}>`;
       }
@@ -1407,7 +1431,14 @@ function uiDialog({title,message,fields=[],okLabel="OK",cancelLabel="Cancel",noC
     function close(result){ ov.remove(); resolve(result); }
     function submit(){
       const out={};
-      fields.forEach((f,i)=>{ out[f.key]=inputs[i].value.trim(); });
+      fields.forEach((f,i)=>{
+        const el=inputs[i];
+        if(f.type==="checklist"){
+          out[f.key]= el? Array.from(el.querySelectorAll("input[type=checkbox]:checked")).map(c=>c.value) : [];
+        }else{
+          out[f.key]= el? el.value.trim() : "";
+        }
+      });
       close(fields.length?out:true);
     }
     box.querySelector('[data-act="ok"]').onclick=submit;
@@ -1415,7 +1446,7 @@ function uiDialog({title,message,fields=[],okLabel="OK",cancelLabel="Cancel",noC
     if(cancelBtn) cancelBtn.onclick=()=>close(null);
     ov.addEventListener("click",e=>{ if(e.target===ov) close(null); });
     box.addEventListener("keydown",e=>{
-      if(e.key==="Enter"){ e.preventDefault(); submit(); }
+      if(e.key==="Enter" && e.target.tagName!=="TEXTAREA"){ e.preventDefault(); submit(); }
       if(e.key==="Escape"){ e.preventDefault(); close(null); }
     });
   });
@@ -1698,6 +1729,56 @@ function renderTimelineOnly(mc){
   return h;
 }
 
+function scheduleDay(gaps, tasks, allMap, mode){
+  const EPS=0.001, CHUNK=1.5, BRK=0.25;
+  const st={}; tasks.forEach(t=>st[t.id]={rem:hoursOf(t), placed:false, end:null});
+  const items=[]; const windowFail=new Set(), blocked=new Set();
+  const earliestOf=t=>{ const e=t.earliest?parseTimeToDec(t.earliest):null; return e==null?-Infinity:e; };
+  const latestOf=t=>{ const l=t.latest?parseTimeToDec(t.latest):null; return l==null?Infinity:l; };
+  function depsDone(t){
+    for(const id of (t.deps||[])){ const d=allMap[id]; if(!d) continue; if(d.done) continue;
+      const s=st[id]; if(s && s.rem<=EPS && s.end!=null) continue; return false; }
+    return true;
+  }
+  function depEnd(t){ let m=-Infinity; for(const id of (t.deps||[])){ const s=st[id]; if(s&&s.end!=null) m=Math.max(m,s.end); } return m; }
+  const readyAt=t=>Math.max(earliestOf(t), depEnd(t));
+
+  let gi=0, cursor=gaps.length?gaps[0].s:0, sinceBreak=0, guard=0;
+  while(gi<gaps.length && guard++<20000){
+    const gap=gaps[gi];
+    if(cursor<gap.s) cursor=gap.s;
+    if(cursor>=gap.e-EPS){ gi++; if(gi<gaps.length){ cursor=gaps[gi].s; sinceBreak=0; } continue; }
+    const remaining=tasks.filter(t=>st[t.id].rem>EPS);
+    if(!remaining.length) break;
+    const ready=remaining.filter(depsDone);
+    const eligible=ready.filter(t=> readyAt(t)<=cursor+EPS && latestOf(t)>cursor+EPS);
+    if(!eligible.length){
+      let nextT=Infinity;
+      ready.forEach(t=>{ const a=readyAt(t); if(a>cursor && latestOf(t)>a+EPS && a<nextT) nextT=a; });
+      if(nextT<Infinity && nextT<gap.e-EPS){ cursor=nextT; sinceBreak=0; continue; }
+      gi++; if(gi<gaps.length){ cursor=gaps[gi].s; sinceBreak=0; } continue;
+    }
+    if(sinceBreak>=CHUNK-EPS && (gap.e-cursor)>BRK+0.1){
+      items.push({type:"break",s:cursor,e:cursor+BRK}); cursor+=BRK; sinceBreak=0; continue;
+    }
+    let t;
+    if(mode==="spread"){
+      t=eligible.reduce((b,x)=>{ const pb=hoursOf(b)-st[b.id].rem, px=hoursOf(x)-st[x.id].rem;
+        if(px<pb-EPS) return x; if(px>pb+EPS) return b; return x._pri.score>b._pri.score?x:b; }, eligible[0]);
+    } else { t=eligible.reduce((b,x)=> x._pri.score>b._pri.score?x:b, eligible[0]); }
+    const room=gap.e-cursor; let run=Math.min(st[t.id].rem,room,CHUNK);
+    const lat=latestOf(t); if(cursor+run>lat) run=lat-cursor;
+    if(run<=EPS){ gi++; if(gi<gaps.length){ cursor=gaps[gi].s; sinceBreak=0; } continue; }
+    const cont=st[t.id].placed;
+    items.push({type:"task",s:cursor,e:cursor+run,task:t,cont});
+    st[t.id].placed=true; cursor+=run; st[t.id].rem-=run; sinceBreak+=run;
+    if(st[t.id].rem<=EPS) st[t.id].end=cursor;
+  }
+  const unfinished=tasks.filter(t=>st[t.id].rem>EPS);
+  unfinished.forEach(t=>{ if(!depsDone(t)) blocked.add(t.id); else if(t.earliest||t.latest) windowFail.add(t.id); });
+  return {items,st,unfinished,windowFail,blocked};
+}
+
 function planDay(){
   const body=document.getElementById("asstBody");
   state.day.start=document.getElementById("dayStart").value||"09:00";
@@ -1738,8 +1819,9 @@ function planDay(){
     return;
   }
 
-  const {segs,alloc}=buildSegments(available,freeH,state.day.style);
-  const placed=placeSegments(gaps,segs);
+  const allMap={}; state.projects.forEach(p=>p.tasks.forEach(t=>{ allMap[t.id]=t; }));
+  const sched=scheduleDay(gaps, available, allMap, state.day.style);
+  const placed=sched.items;
 
   const timeline=[];
   mc.forEach(c=>timeline.push({type:"commit",s:c.s,e:c.e,label:c.label}));
@@ -1759,7 +1841,7 @@ function planDay(){
   else if(fp.imp.score>=72 && (fp.daysLeft==null||fp.daysLeft>2)) why=`it's ${fp.imp.name.toLowerCase()}-importance and worth protecting time for`;
   else if(fp.daysLeft!=null) why=`it balances importance with the nearest deadline (in ${fp.daysLeft} day${fp.daysLeft===1?"":"s"})`;
   else why="it's the most important of what's open";
-  const touched=Object.keys(alloc).length;
+  const touched=new Set(placed.filter(p=>p.type==="task").map(p=>p.task.id)).size;
   const headline = state.day.style==="spread"
     ? `Spread across <b>${touched}</b> task${touched>1?"s":""} today, starting with <b>${esc(firstTask.name)}</b> — ${why}.`
     : `Start with <b>${esc(firstTask.name)}</b> — ${why}.`;
@@ -1782,12 +1864,16 @@ function planDay(){
   let co="";
   const overdue=available.filter(t=>t._pri.level==="overdue");
   if(overdue.length) co+=`<div class="callout warn">Overdue: ${overdue.map(t=>esc(t.name)).join(", ")} — clear these first or move their deadlines.</div>`;
-  const notFit=available.filter(t=>!alloc[t.id]);
-  if(notFit.length) co+=`<div class="callout">No room today: ${notFit.map(t=>esc(t.name)).join(", ")}. Widen your day, free a block, or pin what matters most.</div>`;
-  const partial=available.filter(t=>alloc[t.id] && alloc[t.id] < hoursOf(t)-0.01);
+  const blockedT=available.filter(t=>sched.blocked.has(t.id));
+  if(blockedT.length) co+=`<div class="callout">Waiting on prerequisites: ${blockedT.map(t=>esc(t.name)).join(", ")} — finish what they depend on first (or the prerequisite couldn't be scheduled today).</div>`;
+  const windowT=available.filter(t=>sched.windowFail.has(t.id) && !sched.blocked.has(t.id));
+  if(windowT.length) co+=`<div class="callout warn">Time window too tight: ${windowT.map(t=>esc(t.name)).join(", ")} couldn't fully fit their "not before / not after" times.</div>`;
+  const didntFit=available.filter(t=>sched.st[t.id].rem>0.01 && !sched.blocked.has(t.id) && !sched.windowFail.has(t.id));
+  if(didntFit.length) co+=`<div class="callout">No room today: ${didntFit.map(t=>esc(t.name)).join(", ")}. Widen your day, free a block, or pin what matters most.</div>`;
+  const partial=available.filter(t=>sched.st[t.id].placed && sched.st[t.id].rem>0.01 && !sched.windowFail.has(t.id));
   if(partial.length) co+=`<div class="callout">Started, more time needed later: ${partial.map(t=>esc(t.name)).join(", ")}.</div>`;
   if(upcoming.length) co+=upcomingCallout(upcoming,today);
-  const anyDefaulted=available.some(t=>alloc[t.id] && !(typeof t.hours==="number"&&t.hours>0));
+  const anyDefaulted=placed.some(p=>p.type==="task" && !(typeof p.task.hours==="number"&&p.task.hours>0));
   if(anyDefaulted) co+=`<div class="callout">Some scheduled tasks have no hour estimate, so I assumed 1h. Use "Help me estimate" for a sharper plan.</div>`;
   if(co) html+=`<div class="callouts">${co}</div>`;
 
@@ -2438,6 +2524,7 @@ function initLogin(){
   const pinWrap=document.getElementById("loginPinWrap");
   const note=document.getElementById("loginNote");
   note.textContent="";
+  document.getElementById("loginReset").style.display = (name && hasPin)? "block":"none";
   if(name){
     sub.textContent="Welcome back, "+name;
     document.getElementById("loginName").value=name;
@@ -2449,6 +2536,14 @@ function initLogin(){
     btn.textContent="Get started";
     pinWrap.style.display="block";
   }
+}
+async function resetPin(){
+  const ok=await uiConfirm("Reset your PIN? This clears the PIN only — your tasks and projects stay exactly as they are.","Reset PIN");
+  if(!ok) return;
+  state.profile.pin=""; save();
+  document.getElementById("loginPin").value="";
+  initLogin();
+  document.getElementById("loginNote").textContent="PIN cleared — you can log in without one now.";
 }
 function doLogin(){
   const name=document.getElementById("loginName").value.trim();
@@ -2476,6 +2571,7 @@ async function logout(){
   document.getElementById("loginScreen").classList.remove("hidden");
 }
 document.getElementById("loginBtn").onclick=doLogin;
+document.getElementById("loginReset").onclick=resetPin;
 document.getElementById("loginName").addEventListener("keydown",e=>{ if(e.key==="Enter") doLogin(); });
 document.getElementById("loginPin").addEventListener("keydown",e=>{ if(e.key==="Enter") doLogin(); });
 document.getElementById("acctBtn").onclick=logout;
