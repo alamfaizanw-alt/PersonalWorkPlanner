@@ -56,7 +56,7 @@
   }
   .wrap{max-width:920px;margin:0 auto;padding:30px 18px 90px;}
 
-  /* fixed brass rail across the very top — a precision-instrument cue */
+  /* fixed brass rail across the very top - a precision-instrument cue */
   body::before{
     content:"";position:fixed;top:0;left:0;right:0;height:2px;z-index:100;
     background:linear-gradient(90deg,transparent,var(--gold-soft) 18%,var(--gold-bright) 50%,var(--gold-soft) 82%,transparent);
@@ -76,7 +76,7 @@
   .btn,.icon-btn,.proj-tab,.preset-chip,.check,.closex,input,select,li.task{transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,color .18s ease,transform .12s cubic-bezier(.2,.7,.2,1);}
   :where(button,input,select,a).focus-visible,:where(button,input,select,a):focus-visible{outline:none;box-shadow:var(--focus);}
 
-  /* purposeful, quiet entrance — staggered like the portfolio hero */
+  /* purposeful, quiet entrance - staggered like the portfolio hero */
   @keyframes riseIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
   .wrap>*{animation:riseIn .5s cubic-bezier(.2,.7,.2,1) both;}
   .wrap>*:nth-child(1){animation-delay:.03s;}
@@ -167,8 +167,13 @@
     font-family:inherit;font-size:.82rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
   }
   .login-reset:hover{color:var(--gold-bright);}
-  .login-credit{font-size:.78rem;color:var(--cream-dim);margin:20px 0 0;letter-spacing:.02em;}
+  .login-credit{
+    display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+    font-size:.75rem;color:var(--cream-dim);margin:22px 0 0;letter-spacing:.02em;
+    padding-top:14px;border-top:1px solid var(--line);
+  }
   .login-credit b{color:var(--gold);font-weight:600;}
+  @media(max-width:420px){ .login-credit{justify-content:center;text-align:center;gap:4px;} }
   @media(max-width:560px){ .brand h1{font-size:1.3rem;} .mark{width:38px;height:38px;} .mark svg{width:22px;height:22px;} header.app{padding:10px 18px;margin:0 -18px 18px;} }
 
   button{font-family:inherit;cursor:pointer;}
@@ -760,7 +765,7 @@
     </div>
     <div class="progress-side">
       <span class="today-line" id="todayLine"></span>
-      <span class="pname" id="progName">—</span>
+      <span class="pname" id="progName">-</span>
       <div class="stat-tiles">
         <button class="tile" id="tileAll" data-f="all"><span class="tval" id="tTotal">0</span><span class="tlbl">Tasks</span></button>
         <button class="tile" id="tileDone" data-f="done"><span class="tval" id="tDone">0</span><span class="tlbl">Done</span></button>
@@ -783,7 +788,7 @@
       <input id="fName" type="text" placeholder="e.g. Draft project proposal" autocomplete="off">
     </div>
     <div class="field desc">
-      <label for="fDesc">Details <span style="text-transform:none;letter-spacing:0;color:var(--cream-dim);">(what to do — optional)</span></label>
+      <label for="fDesc">Details <span style="text-transform:none;letter-spacing:0;color:var(--cream-dim);">(what to do - optional)</span></label>
       <textarea id="fDesc" rows="2" placeholder="A note to your future self: what this actually involves…"></textarea>
     </div>
     <div class="field">
@@ -805,7 +810,7 @@
     </div>
     <div class="field" style="flex:0 1 110px;">
       <label for="fHours">Est. hrs</label>
-      <input id="fHours" type="number" min="0" step="0.5" placeholder="—">
+      <input id="fHours" type="number" min="0" step="0.5" placeholder="-">
     </div>
     <div class="actions">
       <button class="btn ghost" id="estBtn" type="button">Not sure? Help me estimate</button>
@@ -818,8 +823,8 @@
   </div>
 
   <footer class="app-foot">
+    <span class="cr">&copy; <span id="footYear">2026</span> &#8226; All rights reserved</span>
     <span class="by">Designed by <b>Faizan Alam</b></span>
-    <span class="cr">&copy; <span id="footYear">2026</span></span>
   </footer>
 </div>
 
@@ -891,16 +896,16 @@
       <div class="field">
         <label for="dayStyle">Approach</label>
         <select id="dayStyle">
-          <option value="focus">Focus — go deep, top tasks first</option>
-          <option value="spread">Spread — touch many tasks</option>
+          <option value="focus">Focus - go deep, top tasks first</option>
+          <option value="spread">Spread - touch many tasks</option>
         </select>
       </div>
       <button class="btn" id="planBtn">Plan my day</button>
     </div>
-    <p class="plan-hint" style="display:none;">Builds a time-boxed schedule below — your unfinished tasks, ranked by importance and deadline, fitted around the fixed blocks you add. Needs at least one task that can start today.</p>
+    <p class="plan-hint" style="display:none;">Builds a time-boxed schedule below - your unfinished tasks, ranked by importance and deadline, fitted around the fixed blocks you add. Needs at least one task that can start today.</p>
 
     <div class="commit-area">
-      <div class="commit-head">Fixed blocks in your day <span>— work, class, gym, kids, meals, anything. Tasks get scheduled around these.</span></div>
+      <div class="commit-head">Fixed blocks in your day <span>- work, class, gym, kids, meals, anything. Tasks get scheduled around these.</span></div>
       <div id="commitList"></div>
       <div class="commit-add">
         <input id="cmLabel" type="text" placeholder="e.g. Gym, Pick up kids, Class" autocomplete="off">
@@ -932,7 +937,7 @@
           <option value="0">Nothing much</option>
           <option value="15" selected>A minor setback</option>
           <option value="30">Real consequences</option>
-          <option value="40">Serious — it blocks other things</option>
+          <option value="40">Serious - it blocks other things</option>
         </select>
       </div>
       <div class="est-q">
@@ -940,7 +945,7 @@
         <select id="qDep">
           <option value="0" selected>No, just me</option>
           <option value="10">Somewhat</option>
-          <option value="20">Yes — others are blocked until it's done</option>
+          <option value="20">Yes - others are blocked until it's done</option>
         </select>
       </div>
       <div class="est-q">
@@ -957,7 +962,7 @@
       <div class="est-q">
         <label for="qSize">Roughly how big is it?</label>
         <select id="qSize">
-          <option value="0.5">Quick — under an hour</option>
+          <option value="0.5">Quick - under an hour</option>
           <option value="4" selected>Half a day</option>
           <option value="8">A full day</option>
           <option value="16">Several days of work</option>
@@ -1118,13 +1123,13 @@
       <input id="loginName" type="text" placeholder="Your name" autocomplete="name">
     </div>
     <div class="login-field" id="loginPinWrap">
-      <label for="loginPin">PIN <span style="text-transform:none;letter-spacing:0;color:var(--cream-dim);">(optional — local lock)</span></label>
+      <label for="loginPin">PIN <span style="text-transform:none;letter-spacing:0;color:var(--cream-dim);">(optional - local lock)</span></label>
       <input id="loginPin" type="password" inputmode="numeric" placeholder="Add a PIN" autocomplete="off">
     </div>
     <button class="btn login-btn" id="loginBtn">Get started</button>
-    <button class="login-reset" id="loginReset" type="button" style="display:none;">Forgot PIN? Reset it (keeps your tasks)</button>
+    <button class="login-reset" id="loginReset" type="button" style="display:none;">Forgot PIN? Reset it</button>
     <p class="login-note" id="loginNote"></p>
-    <p class="login-credit">Designed by <b>Faizan Alam</b> &nbsp;&#8226;&nbsp; &copy; <span id="loginYear">2026</span></p>
+    <p class="login-credit"><span class="cr">&copy; <span id="loginYear">2026</span> &#8226; All rights reserved</span><span class="by">Designed by <b>Faizan Alam</b></span></p>
   </div>
 </div>
 
@@ -1236,7 +1241,7 @@ function renderProgress(){
   document.getElementById("tOver").textContent=overdue;
   document.getElementById("tileOver").classList.toggle("tile-warn", overdue>0);
   document.getElementById("progSub").textContent =
-    total? `${done} of ${total} task${total>1?"s":""} complete` : "No tasks yet — add one below.";
+    total? `${done} of ${total} task${total>1?"s":""} complete` : "No tasks yet - add one below.";
 }
 
 function renderTasks(){
@@ -1411,7 +1416,7 @@ function uiDialog({title,message,fields=[],okLabel="OK",cancelLabel="Cancel",noC
         const opts=f.options||[];
         inner+= opts.length
           ? `<div id="dlg_f${i}" class="dlg-checklist">`+opts.map(o=>`<label class="dlg-check"><input type="checkbox" value="${esc(o.value)}"${(f.value||[]).indexOf(o.value)>=0?" checked":""}> ${esc(o.label)}</label>`).join("")+`</div>`
-          : `<div id="dlg_f${i}" class="dlg-checklist"><span class="dlg-empty">No other tasks yet — add more and they'll show here.</span></div>`;
+          : `<div id="dlg_f${i}" class="dlg-checklist"><span class="dlg-empty">No other tasks yet - add more and they'll show here.</span></div>`;
       }else{
         inner+=`<input id="dlg_f${i}" type="${f.type||"text"}" value="${esc(f.value??"")}" ${f.placeholder?`placeholder="${esc(f.placeholder)}"`:""}>`;
       }
@@ -1507,7 +1512,7 @@ function drawGantt(){
 
   if(!dated.length){
     const msg = ganttFilter==="todo"
-      ? "Nothing outstanding with dates.<br>Everything with a timeline is done — switch to \"All\" to see finished work."
+      ? "Nothing outstanding with dates.<br>Everything with a timeline is done - switch to \"All\" to see finished work."
       : "No tasks with dates yet.<br>Add start/end dates to a task and it will appear on the timeline.";
     body.innerHTML=`<div class="gantt-empty">${msg}</div>`;
     return;
@@ -1526,7 +1531,7 @@ function drawGantt(){
   const totalDays=span;
 
   let html="";
-  // axis ticks — one per day, stepped for long ranges, so dates never duplicate
+  // axis ticks - one per day, stepped for long ranges, so dates never duplicate
   const step=Math.max(1, Math.ceil(totalDays/10));
   let ticks="";
   for(let off=0; off<totalDays; off+=step){
@@ -1633,14 +1638,14 @@ function renderCommitments(){
   const el=document.getElementById("commitList");
   const list=state.day.commitments||[];
   if(!list.length){
-    el.innerHTML=`<div class="callout" style="margin:0;">No fixed blocks yet — add a class, shift, gym session, pickup, or meal and your tasks will schedule around them.</div>`;
+    el.innerHTML=`<div class="callout" style="margin:0;">No fixed blocks yet - add a class, shift, gym session, pickup, or meal and your tasks will schedule around them.</div>`;
     return;
   }
   el.innerHTML="";
   list.slice().sort((a,b)=>parseTimeToDec(a.start)-parseTimeToDec(b.start)).forEach(c=>{
     const row=document.createElement("div");
     row.className="commit-row";
-    row.innerHTML=`<span class="cl">${esc(c.label)}</span><span class="ct">${fmtTime(parseTimeToDec(c.start))} – ${fmtTime(parseTimeToDec(c.end))}</span><button class="icon-btn crm" type="button">Remove</button>`;
+    row.innerHTML=`<span class="cl">${esc(c.label)}</span><span class="ct">${fmtTime(parseTimeToDec(c.start))} - ${fmtTime(parseTimeToDec(c.end))}</span><button class="icon-btn crm" type="button">Remove</button>`;
     row.querySelector(".crm").onclick=()=>{ state.day.commitments=state.day.commitments.filter(x=>x.id!==c.id); save(); renderCommitments(); planDay(); };
     el.appendChild(row);
   });
@@ -1715,7 +1720,7 @@ function placeSegments(gaps,segs){
       items.push({type:"task", s:c, e:c+run, task:segs[si].task, cont:!!seen[id]});
       seen[id]=true; c+=run; rem-=run;
       if(rem<=EPS){ si++; if(si<segs.length) rem=segs[si].hours; }
-      // breather between work chunks — only if more work is coming and there's room
+      // breather between work chunks - only if more work is coming and there's room
       if(si<segs.length && (end-c) > BRK+0.1){
         items.push({type:"break", s:c, e:c+BRK});
         c+=BRK;
@@ -1725,7 +1730,7 @@ function placeSegments(gaps,segs){
   return items;
 }
 function renderTimelineOnly(mc){
-  let h=""; mc.forEach(c=>{ h+=`<div class="block commit"><span class="time">${fmtTime(c.s)} – ${fmtTime(c.e)}</span><span class="what"><span class="nm">${esc(c.label)}</span></span><span class="hrs">${dur2(c.e-c.s)}</span></div>`; });
+  let h=""; mc.forEach(c=>{ h+=`<div class="block commit"><span class="time">${fmtTime(c.s)} - ${fmtTime(c.e)}</span><span class="what"><span class="nm">${esc(c.label)}</span></span><span class="hrs">${dur2(c.e-c.s)}</span></div>`; });
   return h;
 }
 
@@ -1787,7 +1792,7 @@ function planDay(){
   save();
 
   const winStart=parseTimeToDec(state.day.start), winEnd=parseTimeToDec(state.day.end);
-  if(winEnd<=winStart){ body.innerHTML=`<p class="headline">Your day ends before it starts — adjust the start and end times.</p>`; return; }
+  if(winEnd<=winStart){ body.innerHTML=`<p class="headline">Your day ends before it starts - adjust the start and end times.</p>`; return; }
 
   const today=todayMid();
   const ranked=rankTasks(allIncompleteTasks());
@@ -1806,7 +1811,7 @@ function planDay(){
   const freeH=gaps.reduce((a,g)=>a+(g.e-g.s),0);
 
   if(!ranked.length){
-    body.innerHTML=`<p class="headline">No open tasks across your projects — you're all caught up.</p>`+renderTimelineOnly(mc);
+    body.innerHTML=`<p class="headline">No open tasks across your projects - you're all caught up.</p>`+renderTimelineOnly(mc);
     return;
   }
   if(!available.length){
@@ -1815,7 +1820,7 @@ function planDay(){
     return;
   }
   if(freeH<=0.01){
-    body.innerHTML=`<p class="headline">Your fixed blocks fill the whole window — no room left for tasks. Widen your day or trim a block.</p>`+renderTimelineOnly(mc)+`<div class="callouts"><div class="callout">${available.length} task${available.length>1?"s":""} waiting for free time.</div></div>`;
+    body.innerHTML=`<p class="headline">Your fixed blocks fill the whole window - no room left for tasks. Widen your day or trim a block.</p>`+renderTimelineOnly(mc)+`<div class="callouts"><div class="callout">${available.length} task${available.length>1?"s":""} waiting for free time.</div></div>`;
     return;
   }
 
@@ -1843,29 +1848,29 @@ function planDay(){
   else why="it's the most important of what's open";
   const touched=new Set(placed.filter(p=>p.type==="task").map(p=>p.task.id)).size;
   const headline = state.day.style==="spread"
-    ? `Spread across <b>${touched}</b> task${touched>1?"s":""} today, starting with <b>${esc(firstTask.name)}</b> — ${why}.`
-    : `Start with <b>${esc(firstTask.name)}</b> — ${why}.`;
+    ? `Spread across <b>${touched}</b> task${touched>1?"s":""} today, starting with <b>${esc(firstTask.name)}</b> - ${why}.`
+    : `Start with <b>${esc(firstTask.name)}</b> - ${why}.`;
   let html=`<p class="headline">${headline}</p>`;
 
   timeline.forEach(item=>{
     if(item.type==="commit"){
-      html+=`<div class="block commit"><span class="time">${fmtTime(item.s)} – ${fmtTime(item.e)}</span><span class="what"><span class="nm">${esc(item.label)}</span></span><span class="hrs">${dur2(item.e-item.s)}</span></div>`;
+      html+=`<div class="block commit"><span class="time">${fmtTime(item.s)} - ${fmtTime(item.e)}</span><span class="what"><span class="nm">${esc(item.label)}</span></span><span class="hrs">${dur2(item.e-item.s)}</span></div>`;
     }else if(item.type==="break"){
-      html+=`<div class="block brk"><span class="time">${fmtTime(item.s)} – ${fmtTime(item.e)}</span><span class="what"><span class="nm">Break</span></span><span class="hrs">${dur2(item.e-item.s)}</span></div>`;
+      html+=`<div class="block brk"><span class="time">${fmtTime(item.s)} - ${fmtTime(item.e)}</span><span class="what"><span class="nm">Break</span></span><span class="hrs">${dur2(item.e-item.s)}</span></div>`;
     }else{
       const t=item.task, pr=t._pri;
       const pinChip=pr.pinned?` <span class="pbadge p-pin">Pinned</span>`:"";
       const contTag=item.cont?" · continued":"";
       const defTag=(!(typeof t.hours==="number"&&t.hours>0))?" · est. 1h":"";
-      html+=`<div class="block"><span class="time">${fmtTime(item.s)} – ${fmtTime(item.e)}</span><span class="what"><span class="nm">${esc(t.name)}</span> <span class="pbadge ${pr.cls}">${esc(pr.urgLabel)}</span>${pinChip}<br><span class="pj">${esc(t._proj)}${contTag}${defTag}</span></span><span class="hrs">${dur2(item.e-item.s)}</span></div>`;
+      html+=`<div class="block"><span class="time">${fmtTime(item.s)} - ${fmtTime(item.e)}</span><span class="what"><span class="nm">${esc(t.name)}</span> <span class="pbadge ${pr.cls}">${esc(pr.urgLabel)}</span>${pinChip}<br><span class="pj">${esc(t._proj)}${contTag}${defTag}</span></span><span class="hrs">${dur2(item.e-item.s)}</span></div>`;
     }
   });
 
   let co="";
   const overdue=available.filter(t=>t._pri.level==="overdue");
-  if(overdue.length) co+=`<div class="callout warn">Overdue: ${overdue.map(t=>esc(t.name)).join(", ")} — clear these first or move their deadlines.</div>`;
+  if(overdue.length) co+=`<div class="callout warn">Overdue: ${overdue.map(t=>esc(t.name)).join(", ")} - clear these first or move their deadlines.</div>`;
   const blockedT=available.filter(t=>sched.blocked.has(t.id));
-  if(blockedT.length) co+=`<div class="callout">Waiting on prerequisites: ${blockedT.map(t=>esc(t.name)).join(", ")} — finish what they depend on first (or the prerequisite couldn't be scheduled today).</div>`;
+  if(blockedT.length) co+=`<div class="callout">Waiting on prerequisites: ${blockedT.map(t=>esc(t.name)).join(", ")} - finish what they depend on first (or the prerequisite couldn't be scheduled today).</div>`;
   const windowT=available.filter(t=>sched.windowFail.has(t.id) && !sched.blocked.has(t.id));
   if(windowT.length) co+=`<div class="callout warn">Time window too tight: ${windowT.map(t=>esc(t.name)).join(", ")} couldn't fully fit their "not before / not after" times.</div>`;
   const didntFit=available.filter(t=>sched.st[t.id].rem>0.01 && !sched.blocked.has(t.id) && !sched.windowFail.has(t.id));
@@ -1968,7 +1973,7 @@ function gLoadGis(){
     const s=document.createElement("script");
     s.src="https://accounts.google.com/gsi/client"; s.async=true; s.defer=true;
     s.onload=()=>resolve();
-    s.onerror=()=>reject(new Error("Couldn't load Google's sign-in library — check your connection."));
+    s.onerror=()=>reject(new Error("Couldn't load Google's sign-in library - check your connection."));
     document.head.appendChild(s);
   });
 }
@@ -2080,7 +2085,7 @@ async function gSync(){
     gLog("Synced ✓  "+new Date().toLocaleTimeString());
     gRefreshUI();
   }catch(e){
-    if(e && e.code===401){ state.google.connected=false; gToken=null; save(); gRefreshUI(); gLog("Session expired — click Connect Google again."); }
+    if(e && e.code===401){ state.google.connected=false; gToken=null; save(); gRefreshUI(); gLog("Session expired - click Connect Google again."); }
     else gLog("Couldn't sync: "+(e.message||e));
   }
   gSyncing=false;
@@ -2100,14 +2105,14 @@ function openTile(filter){
   if(filter==="done"){
     tasks=tasks.filter(t=>t.done);
     title="Completed · "+p.name;
-    intro="Done and dusted — here's what you've already finished.";
+    intro="Done and dusted - here's what you've already finished.";
   }else if(filter==="overdue"){
     tasks=tasks.filter(t=>!t.done && (function(){const e=parseD(t.end);return e&&e<today;})());
     title="Overdue · "+p.name;
-    intro="Past their deadline — knock these out first, or push the dates.";
+    intro="Past their deadline - knock these out first, or push the dates.";
   }else{
     title="Tasks · "+p.name;
-    intro="Everything in this project — still-open items up top.";
+    intro="Everything in this project - still-open items up top.";
   }
   tasks.sort((a,b)=>{
     if(!!a.done!==!!b.done) return a.done?1:-1;
@@ -2116,7 +2121,7 @@ function openTile(filter){
   document.getElementById("tileTitle").textContent=title;
   const body=document.getElementById("tileBody");
   if(!tasks.length){
-    const msg = filter==="overdue" ? "Nothing overdue — you're on top of it." :
+    const msg = filter==="overdue" ? "Nothing overdue - you're on top of it." :
                 filter==="done" ? "Nothing checked off yet. Go finish something!" :
                 "No tasks in this project yet.";
     body.innerHTML=`<div class="tl-empty">${msg}</div>`;
@@ -2156,39 +2161,39 @@ function saveNote(){
 /* ---------- Tips: grouped mini-menu ---------- */
 const TIPS=[
   {id:"start",label:"Getting started",html:`
-    <h3>Welcome — here's the lay of the land</h3>
+    <h3>Welcome - here's the lay of the land</h3>
     <p>Work Flow Assist is a planner that actually thinks about what matters, instead of a to-do list that just stares back at you. The 30-second tour:</p>
     <ol>
-      <li><b>Add a task.</b> Bottom of the Tasks card — name it, give it a due date, say how important it is, and take a guess at the hours. Blank on those last two? Hit <em>"Not sure? Help me estimate"</em> and answer a few questions.</li>
+      <li><b>Add a task.</b> Bottom of the Tasks card - name it, give it a due date, say how important it is, and take a guess at the hours. Blank on those last two? Hit <em>"Not sure? Help me estimate"</em> and answer a few questions.</li>
       <li><b>Mark it important (or not).</b> The app ranks by importance <em>and</em> deadline, so a big-deal task with a comfy deadline won't get buried under trivial stuff due tomorrow.</li>
-      <li><b>Plan your day.</b> Tap <em>Plan My Day</em>, tell it your hours and any fixed blocks (gym, class, lunch), and it lays out a schedule — breaks included, because you're a human.</li>
+      <li><b>Plan your day.</b> Tap <em>Plan My Day</em>, tell it your hours and any fixed blocks (gym, class, lunch), and it lays out a schedule - breaks included, because you're a human.</li>
       <li><b>Check things off.</b> Tap the checkbox. Watch the ring fill. Feel unreasonably good about it.</li>
     </ol>
-    <p>That's genuinely it. Poke around — nothing in here bites.</p>`},
+    <p>That's genuinely it. Poke around - nothing in here bites.</p>`},
   {id:"plan",label:"Planning your day",html:`
     <h3>Planning your day</h3>
     <p>Open <b>Plan My Day</b> and it builds a real, timed schedule out of your open tasks.</p>
     <ul>
-      <li><b>Day starts / ends</b> — your working window. The whole plan lives inside it.</li>
-      <li><b>Focus vs Spread</b> — same tasks, different strategy. <b>Focus</b> goes deep on your top priorities one at a time. <b>Spread</b> rotates through several so nothing gets ignored. Either way you get <b>breaks</b> built in — a breather roughly every 90 minutes.</li>
-      <li><b>Fixed blocks</b> — add anything locked into your day (work shift, class, gym, picking up kids, lunch). Your tasks schedule <em>around</em> them, and a long task will happily pause and continue after.</li>
+      <li><b>Day starts / ends</b> - your working window. The whole plan lives inside it.</li>
+      <li><b>Focus vs Spread</b> - same tasks, different strategy. <b>Focus</b> goes deep on your top priorities one at a time. <b>Spread</b> rotates through several so nothing gets ignored. Either way you get <b>breaks</b> built in - a breather roughly every 90 minutes.</li>
+      <li><b>Fixed blocks</b> - add anything locked into your day (work shift, class, gym, picking up kids, lunch). Your tasks schedule <em>around</em> them, and a long task will happily pause and continue after.</li>
     </ul>
-    <p>Tasks that can't start yet (a future start date) sit out until their day arrives — the plan tells you when.</p>`},
+    <p>Tasks that can't start yet (a future start date) sit out until their day arrives - the plan tells you when.</p>`},
   {id:"priority",label:"Priorities & estimating",html:`
     <h3>Priorities &amp; estimating</h3>
     <p>The whole point is helping you figure out what's <em>actually</em> important.</p>
     <ul>
-      <li><b>Importance</b> — Low to Critical. High and Critical tasks wear little gold stars so they stand out.</li>
-      <li><b>The ranking</b> — importance × urgency. Overdue and due-soon get loud badges; the rest sorts sensibly underneath.</li>
-      <li><b>Pin it</b> — a genuine "must-do today"? Hit <b>Pin</b> and it jumps to the front of the plan, no arguments.</li>
-      <li><b>"Help me estimate"</b> — truly unsure how big or important something is? It asks a handful of quick questions and hands back a sensible importance + hours guess. No more staring at a blank hours field.</li>
+      <li><b>Importance</b> - Low to Critical. High and Critical tasks wear little gold stars so they stand out.</li>
+      <li><b>The ranking</b> - importance × urgency. Overdue and due-soon get loud badges; the rest sorts sensibly underneath.</li>
+      <li><b>Pin it</b> - a genuine "must-do today"? Hit <b>Pin</b> and it jumps to the front of the plan, no arguments.</li>
+      <li><b>"Help me estimate"</b> - truly unsure how big or important something is? It asks a handful of quick questions and hands back a sensible importance + hours guess. No more staring at a blank hours field.</li>
     </ul>`},
   {id:"gantt",label:"Projects vs tasks & Gantt",html:`
     <h3>Projects vs. just tasks</h3>
-    <p>Short answer: if you're not sure, <b>don't bother with projects</b> — one project and a flat task list is perfectly fine, and honestly how most people should start.</p>
-    <p>Reach for <b>multiple projects</b> when you've got clearly separate buckets of work that you'd rather not see mixed together — say <em>Work</em>, <em>Home reno</em>, and <em>Side hustle</em>. Each project keeps its own task list and its own Gantt chart, so you can focus on one area without the others cluttering the view.</p>
-    <p>Here's the key thing though: <b>Plan My Day doesn't care about project boundaries.</b> It pulls open tasks from <em>all</em> your projects and schedules your actual day across them — because your afternoon doesn't split neatly into "work hours" and "home hours." So projects are just for organizing and reviewing; your daily plan always sees the whole picture.</p>
-    <p>Rule of thumb: use tasks for the <em>what</em>, use projects only when you need the <em>where it belongs</em>. Don't create a project for every little thing — that's just more tabs to click.</p>
+    <p>Short answer: if you're not sure, <b>don't bother with projects</b> - one project and a flat task list is perfectly fine, and honestly how most people should start.</p>
+    <p>Reach for <b>multiple projects</b> when you've got clearly separate buckets of work that you'd rather not see mixed together - say <em>Work</em>, <em>Home reno</em>, and <em>Side hustle</em>. Each project keeps its own task list and its own Gantt chart, so you can focus on one area without the others cluttering the view.</p>
+    <p>Here's the key thing though: <b>Plan My Day doesn't care about project boundaries.</b> It pulls open tasks from <em>all</em> your projects and schedules your actual day across them - because your afternoon doesn't split neatly into "work hours" and "home hours." So projects are just for organizing and reviewing; your daily plan always sees the whole picture.</p>
+    <p>Rule of thumb: use tasks for the <em>what</em>, use projects only when you need the <em>where it belongs</em>. Don't create a project for every little thing - that's just more tabs to click.</p>
     <h4>Projects, mechanically</h4>
     <ul>
       <li>The tabs up top: <b>switch</b>, <b>+ New project</b>, or <b>Rename</b>.</li>
@@ -2197,27 +2202,27 @@ const TIPS=[
     <h4>The Gantt chart</h4>
     <ul>
       <li><b>View Gantt Chart</b> draws every task as a bar from its start to end date.</li>
-      <li>Use the dropdown to see <b>one project</b> or <b>all projects combined</b> — the combined view lines everything up on one shared timeline so you can spot clashes across your whole life at once.</li>
+      <li>Use the dropdown to see <b>one project</b> or <b>all projects combined</b> - the combined view lines everything up on one shared timeline so you can spot clashes across your whole life at once.</li>
     </ul>`},
   {id:"data",label:"Saving, offline & privacy",html:`
     <h3>Saving, offline &amp; your privacy</h3>
     <ul>
-      <li><b>Saving</b> — automatic. Every change is stored in your browser the instant you make it. No save button to forget.</li>
-      <li><b>Offline</b> — works with no internet once it's loaded. Install it / add it to your home screen and it opens like a real app.</li>
-      <li><b>Privacy</b> — your data lives on <em>your</em> device. Nothing leaves it unless you turn on Google sync or ask the AI Copilot something — and only those two ever phone home.</li>
-      <li><b>Heads up</b> — it's per-device. Clearing your browser data wipes it, and your phone and laptop keep separate lists unless you connect Google.</li>
+      <li><b>Saving</b> - automatic. Every change is stored in your browser the instant you make it. No save button to forget.</li>
+      <li><b>Offline</b> - works with no internet once it's loaded. Install it / add it to your home screen and it opens like a real app.</li>
+      <li><b>Privacy</b> - your data lives on <em>your</em> device. Nothing leaves it unless you turn on Google sync or ask the AI Copilot something - and only those two ever phone home.</li>
+      <li><b>Heads up</b> - it's per-device. Clearing your browser data wipes it, and your phone and laptop keep separate lists unless you connect Google.</li>
     </ul>`},
   {id:"google",label:"Google sync & hosting",html:`
     <h3>Getting it online + Google sync</h3>
     <p>Two things need a real web address (not a file on your desktop): installing it properly, and Google sync. Here's the whole thing, start to finish.</p>
-    <h4>Option A — Host on GitHub Pages (free, permanent)</h4>
+    <h4>Option A - Host on GitHub Pages (free, permanent)</h4>
     <ol>
       <li>Make a new GitHub repo (Public), e.g. <code>work-flow-assist</code>.</li>
       <li>Upload all five files to the repo <b>root</b>: <code>index.html</code>, <code>sw.js</code>, <code>manifest.webmanifest</code>, <code>icon-192.png</code>, <code>icon-512.png</code>.</li>
       <li><b>Settings → Pages → Deploy from a branch → main → / (root) → Save.</b></li>
-      <li>Give it a minute — you're live at <code>https://YOUR-NAME.github.io/work-flow-assist/</code>.</li>
+      <li>Give it a minute - you're live at <code>https://YOUR-NAME.github.io/work-flow-assist/</code>.</li>
     </ol>
-    <h4>Option B — Run it locally (quick testing)</h4>
+    <h4>Option B - Run it locally (quick testing)</h4>
     <p>Double-clicking the file (<code>file://…</code>) is fine for <em>using</em> the app, but Google sign-in refuses to run from a file. So start a tiny local server:</p>
     <ol>
       <li>Open a terminal in the folder that has <code>index.html</code>.</li>
@@ -2231,18 +2236,18 @@ const TIPS=[
       <li><b>APIs &amp; Services → Library</b> → search <b>Google Tasks API</b> → <b>Enable</b>.</li>
       <li><b>APIs &amp; Services → OAuth consent screen</b> → <b>External</b> → add an app name and your email → under <b>Test users</b>, add your own Google address. (This is what lets you skip Google's formal verification for personal use.)</li>
       <li><b>Credentials → Create credentials → OAuth client ID</b> → Application type <b>Web application</b>.</li>
-      <li>Under <b>Authorized JavaScript origins</b>, add the exact address you'll open the app from — <em>no trailing slash</em>:
+      <li>Under <b>Authorized JavaScript origins</b>, add the exact address you'll open the app from - <em>no trailing slash</em>:
         <ul><li><code>https://YOUR-NAME.github.io</code> (GitHub Pages)</li><li><code>http://localhost:8000</code> (local testing)</li></ul></li>
       <li>Create it, then <b>copy the Client ID</b> (it ends in <code>.apps.googleusercontent.com</code>).</li>
-      <li>In the app, tap the <b>cloud button</b> → paste the Client ID → <b>Connect Google</b>. The first time, Google shows an "this app isn't verified" screen — expected, since you're the test user. Click <b>Advanced → Go to (your app)</b> and allow.</li>
+      <li>In the app, tap the <b>cloud button</b> → paste the Client ID → <b>Connect Google</b>. The first time, Google shows an "this app isn't verified" screen - expected, since you're the test user. Click <b>Advanced → Go to (your app)</b> and allow.</li>
       <li>Hit <b>Sync now</b>. Tasks flow into a dedicated <b>Work Flow Assist</b> list, leaving your other Google stuff alone.</li>
     </ol>
-    <p><b>If it won't connect:</b> the origin must match <em>exactly</em> — <code>http</code> vs <code>https</code>, the right port, and no trailing slash. An "origin mismatch" error is almost always this. And sync needs internet; the rest of the app doesn't.</p>`},
+    <p><b>If it won't connect:</b> the origin must match <em>exactly</em> - <code>http</code> vs <code>https</code>, the right port, and no trailing slash. An "origin mismatch" error is almost always this. And sync needs internet; the rest of the app doesn't.</p>`},
   {id:"ai",label:"AI Copilot",html:`
     <h3>The AI Copilot</h3>
-    <p>The chat has two tabs. <b>Guide</b> (free, offline, zero setup) answers "how do I…" questions about the app. <b>AI Copilot</b> is a real language model that looks at your actual tasks and helps you think — "what should I tackle first?", "reorganize my week", "why is that first?".</p>
+    <p>The chat has two tabs. <b>Guide</b> (free, offline, zero setup) answers "how do I…" questions about the app. <b>AI Copilot</b> is a real language model that looks at your actual tasks and helps you think - "what should I tackle first?", "reorganize my week", "why is that first?".</p>
     <ul>
-      <li>It needs internet and your own <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Anthropic API key</a> (paste it into the Copilot tab — it's stored only on your device).</li>
+      <li>It needs internet and your own <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Anthropic API key</a> (paste it into the Copilot tab - it's stored only on your device).</li>
       <li>Each message costs a small amount against your key. It defaults to the cheap, fast model.</li>
       <li>Using it sends your task list to Anthropic to answer. The Guide sends nothing anywhere.</li>
     </ul>`}
@@ -2272,17 +2277,17 @@ const GUIDE_KB=[
   {k:["overview","app","planner","purpose","tracker"],a:"Work Flow Assist is a personal task and day planner. You add tasks with dates and importance, it ranks them by importance and deadline, and the Plan My Day tool builds a time-boxed schedule around your fixed daily commitments. It runs in your browser, saves locally, and works offline."},
   {k:["add","create","new","task"],a:"To add a task, use the form at the bottom of the tracker: type a name, optionally set a start and end date, an importance level, and estimated hours, then press Add Task. On mobile, the center + button in the bottom bar jumps you to the form."},
   {k:["edit","change","delete","remove","task"],a:"Each task row has Edit and Delete buttons. Edit opens a dialog for its name, importance, dates, and hours. Delete removes it (and if you're synced with Google Tasks, it's removed there on your next sync too)."},
-  {k:["estimate","estimator","hours","duration","sizing","help"],a:"If you're unsure how big or important a task is, click 'Not sure? Help me estimate'. It asks a few questions — consequences, who depends on it, how clear the steps are, whether you've done it before — and suggests an importance level and an hours estimate you can apply."},
+  {k:["estimate","estimator","hours","duration","sizing","help"],a:"If you're unsure how big or important a task is, click 'Not sure? Help me estimate'. It asks a few questions - consequences, who depends on it, how clear the steps are, whether you've done it before - and suggests an importance level and an hours estimate you can apply."},
   {k:["priority","prioritize","important","importance","rank","order","urgent","stars"],a:"Priority blends importance and urgency (an Eisenhower-style mix), not just the nearest deadline. High and Critical tasks show gold stars, overdue and due-soon show coloured badges, and you can Pin a task to force it to the top."},
   {k:["plan","day","schedule","focus","spread","approach"],a:"Plan My Day builds today's schedule. Set your day's start and end times and pick an approach: Focus goes deep on your top tasks in order; Spread rotates through many in shorter chunks. It only schedules tasks that can start today and fits them around your fixed blocks."},
   {k:["focus","spread","difference","vs"],a:"Focus concentrates your available hours on the highest-priority tasks one at a time (good for deep work). Spread caps each task at about 1.5 hours and rotates through several, so you make progress on many. Pick whichever fits the day."},
-  {k:["fixed","block","blocks","commitment","gym","class","work","kids","meal","break","lunch"],a:"In Plan My Day, add fixed blocks — work shift, class, gym, picking up kids, meals, anything locked into your day. Tasks get scheduled into the gaps around them, and a task will even split to continue after a block. Quick-add chips make common ones fast."},
+  {k:["fixed","block","blocks","commitment","gym","class","work","kids","meal","break","lunch"],a:"In Plan My Day, add fixed blocks - work shift, class, gym, picking up kids, meals, anything locked into your day. Tasks get scheduled into the gaps around them, and a task will even split to continue after a block. Quick-add chips make common ones fast."},
   {k:["gantt","chart","timeline","bars"],a:"View Gantt Chart opens a pop-up timeline showing each task as a bar from its start to end date. Use the dropdown to see one project's chart or all projects combined."},
-  {k:["project","projects","rename","switch","multiple","separate","organize","buckets"],a:"Projects are optional — one project with a flat task list is fine to start. Add multiple projects only when you have clearly separate buckets of work (Work, Home, Side project) you'd rather not mix. Each keeps its own tasks and Gantt, but Plan My Day still pulls from all of them, since your real day spans everything. Use the tabs up top to switch, add, or rename. See Tips → Projects vs tasks for the full rundown."},
+  {k:["project","projects","rename","switch","multiple","separate","organize","buckets"],a:"Projects are optional - one project with a flat task list is fine to start. Add multiple projects only when you have clearly separate buckets of work (Work, Home, Side project) you'd rather not mix. Each keeps its own tasks and Gantt, but Plan My Day still pulls from all of them, since your real day spans everything. Use the tabs up top to switch, add, or rename. See Tips → Projects vs tasks for the full rundown."},
   {k:["progress","ring","percent","tiles","done","complete"],a:"The ring at the top shows what percent of the current project's tasks are complete, with tiles for total, done, and overdue counts. Tap a task's checkbox to mark it complete."},
-  {k:["offline","save","saved","data","stored","storage","private","privacy"],a:"Everything saves automatically in your browser on this device — no account, no server. It works fully offline. Your data stays on your device unless you turn on Google sync or use the AI Copilot (both send data out only when you choose to use them)."},
+  {k:["offline","save","saved","data","stored","storage","private","privacy"],a:"Everything saves automatically in your browser on this device - no account, no server. It works fully offline. Your data stays on your device unless you turn on Google sync or use the AI Copilot (both send data out only when you choose to use them)."},
   {k:["google","calendar","tasks","sync","connect"],a:"The cloud button in the header connects Google Tasks (which also show in Google Calendar's Tasks panel). After a one-time Google Cloud setup and pasting your Client ID, Sync now pushes tasks to a dedicated 'Work Flow Assist' list; completing or deleting on either side syncs. It needs internet."},
-  {k:["install","laptop","phone","offline","github","host","run"],a:"To use it on a laptop, just open index.html in your browser, or host the files on GitHub Pages. On a phone, open the hosted link once online, then Add to Home Screen / Install — after that it runs like an app, offline. Google sync and the AI Copilot need a real web address (not a file), plus internet."},
+  {k:["install","laptop","phone","offline","github","host","run"],a:"To use it on a laptop, just open index.html in your browser, or host the files on GitHub Pages. On a phone, open the hosted link once online, then Add to Home Screen / Install - after that it runs like an app, offline. Google sync and the AI Copilot need a real web address (not a file), plus internet."},
   {k:["copilot","ai","chat","key","cost","llm","model"],a:"The AI Copilot tab is a real language model that reasons about your tasks in plain English (reorder my week, why is this first, etc.). It needs internet and your own Anthropic API key, and each message has a small cost. The Guide tab (this one) is free and offline."}
 ];
 const GUIDE_TOPICS=["How do I plan my day?","Focus vs Spread?","What does the estimator do?","How does priority work?","Connect Google Tasks","Is my data private?"];
@@ -2302,7 +2307,7 @@ function guideAnswer(q){
     if(score>bestScore){ bestScore=score; best=e; }
   });
   if(best && bestScore>=1) return best.a;
-  return "I can explain any part of the app — try one of the suggestions below, or ask about adding tasks, priorities, planning your day, the Gantt chart, Google sync, or working offline. For open-ended planning, switch to the AI Copilot tab.";
+  return "I can explain any part of the app - try one of the suggestions below, or ask about adding tasks, priorities, planning your day, the Gantt chart, Google sync, or working offline. For open-ended planning, switch to the AI Copilot tab.";
 }
 
 function openChat(){
@@ -2310,7 +2315,7 @@ function openChat(){
   document.getElementById("aiKey").value=state.ai.key||"";
   setChatMode(chatMode);
   if(!chatGreeted){
-    addMsg("bot","Hi — I'm your in-app guide. Ask me how anything works, or switch to the AI Copilot tab for hands-on help with your actual tasks.");
+    addMsg("bot","Hi - I'm your in-app guide. Ask me how anything works, or switch to the AI Copilot tab for hands-on help with your actual tasks.");
     chatGreeted=true;
   }
   document.getElementById("chatOverlay").classList.add("open");
@@ -2353,13 +2358,13 @@ function taskSnapshot(){
     p.tasks.forEach(t=>out.push(`- ${t.name} | ${t.done?"done":"open"} | start ${t.start||"none"} | due ${t.end||"none"} | ${(typeof t.hours==="number"&&t.hours>0)?t.hours+"h":"no estimate"} | importance ${t.importance||"normal"}${t.pinned?" | PINNED":""}`));
   });
   const d=state.day;
-  out.push(`Day window: ${d.start}–${d.end}; approach ${d.style}; fixed blocks: ${(d.commitments||[]).map(c=>c.label+" "+c.start+"-"+c.end).join("; ")||"none"}`);
+  out.push(`Day window: ${d.start}-${d.end}; approach ${d.style}; fixed blocks: ${(d.commitments||[]).map(c=>c.label+" "+c.start+"-"+c.end).join("; ")||"none"}`);
   const today=new Date().toISOString().slice(0,10);
   out.push("Today's date: "+today);
   return out.join("\n");
 }
 async function aiCall(){
-  const sys="You are the built-in assistant for Work Flow Assist, a personal task and day planner. Help the user prioritize and plan in a concise, practical, friendly way. You cannot directly modify their tasks — give clear guidance they can act on in the app (which has task importance levels, an importance×urgency ranking, pinning, and a Plan My Day tool with Focus and Spread modes). Here is the user's current data:\n\n"+taskSnapshot();
+  const sys="You are the built-in assistant for Work Flow Assist, a personal task and day planner. Help the user prioritize and plan in a concise, practical, friendly way. You cannot directly modify their tasks - give clear guidance they can act on in the app (which has task importance levels, an importance×urgency ranking, pinning, and a Plan My Day tool with Focus and Spread modes). Here is the user's current data:\n\n"+taskSnapshot();
   const res=await fetch("https://api.anthropic.com/v1/messages",{
     method:"POST",
     headers:{
@@ -2399,7 +2404,7 @@ function sendChat(){
     return;
   }
   // copilot
-  if(!state.ai.key){ addMsg("bot","Add your Anthropic API key above to use the copilot — the Guide tab works without one."); setChatMode("copilot"); return; }
+  if(!state.ai.key){ addMsg("bot","Add your Anthropic API key above to use the copilot - the Guide tab works without one."); setChatMode("copilot"); return; }
   chatHistory.push({role:"user",content:q});
   const t=typingBubble();
   aiCall().then(ans=>{
@@ -2407,8 +2412,8 @@ function sendChat(){
   }).catch(e=>{
     t.remove();
     let m="Couldn't reach the model: "+(e.message||e);
-    if(e.status===401) m="That API key was rejected — double-check it in the copilot setup.";
-    if(e.status===429) m="Rate limited or out of credit on your API key — try again shortly.";
+    if(e.status===401) m="That API key was rejected - double-check it in the copilot setup.";
+    if(e.status===429) m="Rate limited or out of credit on your API key - try again shortly.";
     addMsg("bot",m);
     chatHistory.pop();
   });
@@ -2475,7 +2480,7 @@ document.getElementById("aiSaveKey").onclick=()=>{
   const k=document.getElementById("aiKey").value.trim();
   state.ai.key=k; save();
   setChatMode("copilot");
-  addMsg("bot", k? "Key saved on this device. Ask me to help plan — e.g. \"what should I focus on today?\"" : "Key cleared. The Guide tab still works free and offline.");
+  addMsg("bot", k? "Key saved on this device. Ask me to help plan - e.g. \"what should I focus on today?\"" : "Key cleared. The Guide tab still works free and offline.");
 };
 
 /* Google Tasks sync wiring */
@@ -2516,45 +2521,44 @@ document.getElementById("tabAdd").onclick=()=>{
 })();
 
 /* ---------- Front-page login (local profile) ---------- */
-let loginOk=false;
+let loginOk=false, resetMode=false;
 function initLogin(){
+  resetMode=false;
   const name=state.profile.name, hasPin=!!state.profile.pin;
   const sub=document.getElementById("loginSub");
   const btn=document.getElementById("loginBtn");
   const pinWrap=document.getElementById("loginPinWrap");
+  const pin=document.getElementById("loginPin");
   const note=document.getElementById("loginNote");
   note.textContent="";
+  pin.value="";
   document.getElementById("loginReset").style.display = (name && hasPin)? "block":"none";
   if(name){
     sub.textContent="Welcome back, "+name;
     document.getElementById("loginName").value=name;
     btn.textContent="Log in";
     pinWrap.style.display = hasPin? "block":"none";
-    document.getElementById("loginPin").placeholder = hasPin? "Enter your PIN":"Add a PIN";
+    pin.placeholder = hasPin? "Enter your PIN":"Add a PIN";
   }else{
     sub.textContent="Set up your workspace";
     btn.textContent="Get started";
     pinWrap.style.display="block";
+    pin.placeholder="Add a PIN";
   }
 }
-async function resetPin(){
-  const ok=await uiConfirm("Reset your PIN? This clears the PIN only — your tasks and projects stay exactly as they are.","Reset PIN");
-  if(!ok) return;
-  state.profile.pin=""; save();
-  document.getElementById("loginPin").value="";
-  initLogin();
-  document.getElementById("loginNote").textContent="PIN cleared — you can log in without one now.";
+function startReset(){
+  resetMode=true;
+  document.getElementById("loginSub").textContent="Create a new PIN";
+  const pinWrap=document.getElementById("loginPinWrap");
+  pinWrap.style.display="block";
+  const pin=document.getElementById("loginPin");
+  pin.value=""; pin.placeholder="Choose a new PIN (or leave blank for no lock)";
+  document.getElementById("loginBtn").textContent="Set new PIN";
+  document.getElementById("loginReset").style.display="none";
+  document.getElementById("loginNote").textContent="";
+  setTimeout(()=>pin.focus(),60);
 }
-function doLogin(){
-  const name=document.getElementById("loginName").value.trim();
-  const pin=document.getElementById("loginPin").value;
-  const note=document.getElementById("loginNote");
-  if(!name){ document.getElementById("loginName").focus(); return; }
-  if(state.profile.name){
-    if(state.profile.pin && pin!==state.profile.pin){ note.textContent="Incorrect PIN — try again."; return; }
-  }else{
-    state.profile.name=name; state.profile.pin=pin||""; save();
-  }
+function enterApp(){
   loginOk=true;
   const a=document.getElementById("acctBtn");
   a.textContent=(state.profile.name.trim()[0]||"?").toUpperCase();
@@ -2562,16 +2566,41 @@ function doLogin(){
   document.getElementById("loginScreen").classList.add("hidden");
   render();
 }
+function doReset(){
+  const newPin=document.getElementById("loginPin").value;
+  const oldPin=state.profile.pin;
+  if(newPin && oldPin && newPin===oldPin){
+    document.getElementById("loginNote").textContent="Looks like you figured out your old PIN after all \uD83D\uDE1C";
+    state.profile.pin=newPin; save();
+    setTimeout(enterApp,1900);
+    return;
+  }
+  state.profile.pin=newPin||""; save();
+  resetMode=false;
+  enterApp();
+}
+function doLogin(){
+  if(resetMode) return doReset();
+  const name=document.getElementById("loginName").value.trim();
+  const pin=document.getElementById("loginPin").value;
+  const note=document.getElementById("loginNote");
+  if(!name){ document.getElementById("loginName").focus(); return; }
+  if(state.profile.name){
+    if(state.profile.pin && pin!==state.profile.pin){ note.textContent="Incorrect PIN, try again."; return; }
+  }else{
+    state.profile.name=name; state.profile.pin=pin||""; save();
+  }
+  enterApp();
+}
 async function logout(){
   const ok=await uiConfirm("Log out of this device? Your tasks stay saved here.","Log out");
   if(!ok) return;
   loginOk=false;
-  document.getElementById("loginPin").value="";
   initLogin();
   document.getElementById("loginScreen").classList.remove("hidden");
 }
 document.getElementById("loginBtn").onclick=doLogin;
-document.getElementById("loginReset").onclick=resetPin;
+document.getElementById("loginReset").onclick=startReset;
 document.getElementById("loginName").addEventListener("keydown",e=>{ if(e.key==="Enter") doLogin(); });
 document.getElementById("loginPin").addEventListener("keydown",e=>{ if(e.key==="Enter") doLogin(); });
 document.getElementById("acctBtn").onclick=logout;
